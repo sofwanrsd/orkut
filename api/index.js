@@ -4,6 +4,7 @@ const cors = require("cors");
 const multer = require("multer");
 const dashboardView = require("../src/views/dashboard");
 const apiController = require("../src/controllers/apiController");
+const settings = require("../src/config/settings");
 const { error } = require("../src/utils/response");
 
 // Multer setup for file uploads (memory storage)
@@ -44,7 +45,16 @@ app.post("/api/qris/decode", upload.single('image'), apiController.decodeQrisIma
 app.use((req, res) => error(res, "Endpoint not found", 404));
 
 if (require.main === module) {
-  app.listen(3000, () => console.log("Nexus QRIS running on port 3000"));
+  app.listen(3000, () => {
+    console.clear();
+    console.log(`
+    =============================================
+    🧡 TAVEVE API GATEWAY v${settings.app.version}
+    =============================================
+    [+] Server is running on port 3000
+    [+] Ready to serve transactions!
+    `);
+  });
 }
 
 module.exports = app;
