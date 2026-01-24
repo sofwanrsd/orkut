@@ -14,12 +14,12 @@ module.exports = {
     // Data Identitas Perangkat Baru
     device: {
       app_reg_id:
-        "e5aCENGrQOWvhQWYnv-uNc:APA91bFj3O_mv5Nf_2SM4Duz4Z8Ug3nBNaHlgodlY92CBuNIA9xmc0Dahev5xxqssPmnTdcie4mlhiG9ZAE1iCe1QbyhxcUyGXlenJxiUaXdfm1rklOEo9k",
-      phone_uuid: "e5aCENGrQOWvhQWYnv-uNc",
-      phone_model: "sdk_gphone64_x86_64",
+        "di309HvATsaiCppl5eDpoc:APA91bFUcTOH8h2XHdPRz2qQ5Bezn-3_TaycFcJ5pNLGWpmaxheQP9Ri0E56wLHz0_b1vcss55jbRQXZgc9loSfBdNa5nZJZVMlk7GS1JDMGyFUVvpcwXbMDg8tjKGZAurCGR4kDMDRJ",
+      phone_uuid: "di309HvATsaiCppl5eDpoc",
+      phone_model: "SM-G960N",
       phone_android_version: "16",
       app_version_code: "250811",
-      app_version_name: "25.07.11",
+      app_version_name: "25.08.11",
       ui_mode: "light",
     },
   },
