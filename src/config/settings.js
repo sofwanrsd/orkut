@@ -2,8 +2,8 @@
 module.exports = {
   app: {
     name: "Taveve API Gateway",
-    version: "Lite-1.0.1", // Saya naikkan dikit versinya
-    maintainer: "CodeByDede",
+    version: "1.0",
+    maintainer: "ByDede",
   },
 
   // Konfigurasi OrderKuota (Bypass Constants Baru)

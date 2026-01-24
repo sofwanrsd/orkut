@@ -7,11 +7,11 @@ module.exports = () => `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${settings.app.name} - Nexus Gateway</title>
+    <title>${settings.app.name} - API Gateway</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     
     <script>
       tailwind.config = {
@@ -19,16 +19,28 @@ module.exports = () => `
         theme: {
           extend: {
             fontFamily: { 
-                sans: ['Outfit', 'sans-serif'],
+                sans: ['Inter', 'system-ui', 'sans-serif'],
                 mono: ['JetBrains Mono', 'monospace'] 
             },
             colors: { 
-                nexus: { 
-                    bg: '#020617', 
-                    card: '#0f172a',
-                    cyan: '#06b6d4',
-                    purple: '#8b5cf6'
-                } 
+                taveve: { 
+                    50: '#fffbf0',
+                    100: '#fff3d6',
+                    200: '#ffe7ad',
+                    300: '#ffd478',
+                    400: '#ffb84d',
+                    500: '#F5A623',
+                    600: '#e68a00',
+                    700: '#c77200',
+                    800: '#9e5b00',
+                    900: '#7a4600',
+                    950: '#4d2c00'
+                },
+                orange: {
+                    DEFAULT: '#F5A623',
+                    dark: '#c77200',
+                    light: '#ffb84d'
+                }
             },
             animation: {
                 'pulse-glow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
@@ -38,38 +50,34 @@ module.exports = () => `
       }
     </script>
     <style>
-       /* --- OPTIMIZED CYBERPUNK THEME (Ringan & Smooth) --- */
+       /* --- TAVEVE ORANGE THEME --- */
        body { 
-           background-color: #020617;
-           background-image: 
-                linear-gradient(rgba(6, 182, 212, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
-           background-size: 40px 40px;
-           background-attachment: fixed; /* Kunci Scroll biar Ringan */
-           color: #e2e8f0;
+           background: linear-gradient(135deg, #1a1108 0%, #2d1e0f 50%, #1a1108 100%);
+           background-attachment: fixed;
+           color: #f1f5f9;
        }
        .glass { 
-           background: rgba(15, 23, 42, 0.8); 
-           backdrop-filter: blur(5px);
-           -webkit-backdrop-filter: blur(5px);
-           border: 1px solid rgba(6, 182, 212, 0.1);
-           box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.2);
+           background: rgba(26, 17, 8, 0.85); 
+           backdrop-filter: blur(12px);
+           -webkit-backdrop-filter: blur(12px);
+           border: 1px solid rgba(245, 166, 35, 0.2);
+           box-shadow: 0 8px 32px 0 rgba(245, 166, 35, 0.15);
        }
        .input-tech {
-           background: rgba(2, 6, 23, 0.6);
-           border: 1px solid rgba(255,255,255,0.1);
+           background: rgba(26, 17, 8, 0.7);
+           border: 1px solid rgba(245, 166, 35, 0.25);
            color: #fff;
            transition: all 0.3s ease;
        }
        .input-tech:focus {
-           border-color: #06b6d4;
-           box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
+           border-color: #F5A623;
+           box-shadow: 0 0 15px rgba(245, 166, 35, 0.4);
            outline: none;
        }
        ::-webkit-scrollbar { width: 6px; height: 6px; }
        ::-webkit-scrollbar-track { background: transparent; }
        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-       ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
+       ::-webkit-scrollbar-thumb:hover { background: #F5A623; }
        pre { white-space: pre-wrap; word-wrap: break-word; }
     </style>
 </head>
@@ -78,15 +86,15 @@ module.exports = () => `
     <header class="w-full max-w-6xl mb-10 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
         <div class="flex items-center gap-5">
             <div class="relative group">
-                <div class="absolute -inset-1 bg-gradient-to-r from-cyan-600 to-purple-600 rounded-lg blur opacity-40 group-hover:opacity-75 transition duration-200"></div>
-                <div class="relative h-14 w-14 bg-slate-900 rounded-lg flex items-center justify-center border border-slate-700">
-                    <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-400">N</span>
+                <div class="absolute -inset-1 bg-gradient-to-r from-taveve-600 to-orange rounded-lg blur opacity-60 group-hover:opacity-90 transition duration-200"></div>
+                <div class="relative h-14 w-14 bg-slate-900 rounded-lg flex items-center justify-center border border-taveve-800">
+                    <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-taveve-400 to-taveve-500">T</span>
                 </div>
             </div>
             <div>
                 <h1 class="text-3xl font-bold text-white tracking-tight">${settings.app.name}</h1>
                 <div class="flex items-center gap-2 mt-1">
-                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-cyan-950 text-cyan-400 border border-cyan-900">CORE v${settings.app.version}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-taveve-950 text-taveve-300 border border-taveve-800">v${settings.app.version}</span>
                     <span class="text-xs text-slate-500 font-mono">Serverless</span>
                 </div>
             </div>
@@ -105,12 +113,12 @@ module.exports = () => `
         
         <div class="flex gap-6 mb-8 border-b border-slate-800">
             <button @click="activeTab = 'console'" 
-                :class="activeTab === 'console' ? 'text-cyan-400 border-cyan-400' : 'text-slate-500 border-transparent hover:text-slate-300'"
+                :class="activeTab === 'console' ? 'text-taveve-400 border-taveve-500' : 'text-slate-500 border-transparent hover:text-slate-300'"
                 class="pb-3 px-1 text-sm font-bold uppercase tracking-widest border-b-2 transition-all duration-300 flex items-center gap-2">
                 <span>⚡ Console</span>
             </button>
             <button @click="activeTab = 'docs'" 
-                :class="activeTab === 'docs' ? 'text-purple-400 border-purple-400' : 'text-slate-500 border-transparent hover:text-slate-300'"
+                :class="activeTab === 'docs' ? 'text-taveve-300 border-taveve-400' : 'text-slate-500 border-transparent hover:text-slate-300'"
                 class="pb-3 px-1 text-sm font-bold uppercase tracking-widest border-b-2 transition-all duration-300 flex items-center gap-2">
                 <span>📚 Docs</span>
             </button>
@@ -122,19 +130,20 @@ module.exports = () => `
                 <div class="glass rounded-2xl p-1">
                     <div class="bg-slate-900/50 rounded-xl p-6">
                         <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                            <span class="w-2 h-2 bg-cyan-500 rounded-full"></span> Request Config
+                            <span class="w-2 h-2 bg-taveve-500 rounded-full"></span> Request Config
                         </h2>
                         
                         <form @submit.prevent="sendRequest" class="space-y-5">
                             <div class="relative group">
-                                <label class="block text-[10px] font-bold text-cyan-500 uppercase mb-1.5">Target Endpoint</label>
+                                <label class="block text-[10px] font-bold text-taveve-400 uppercase mb-1.5">Target Endpoint</label>
                                 <select x-model="selectedFeature" @change="resetForm()" class="input-tech w-full rounded-lg p-3 text-sm cursor-pointer appearance-none">
                                     <option value="login">🔐 Login (Request OTP)</option>
                                     <option value="verify">✅ Verify OTP (Get Token)</option>
                                     <option value="mutasi">💰 Cek Mutasi QRIS</option>
+                                    <option value="decode">📷 Decode QRIS dari Foto</option>
                                     <option value="dynamic">🔁 Buat Dynamic QRIS</option>
                                 </select>
-                                <div class="absolute right-4 top-[2.4rem] text-cyan-500 pointer-events-none text-xs">▼</div>
+                                <div class="absolute right-4 top-[2.4rem] text-taveve-400 pointer-events-none text-xs">▼</div>
                             </div>
 
                             <div class="space-y-4" x-transition>
@@ -155,7 +164,7 @@ module.exports = () => `
                                 <template x-if="selectedFeature === 'verify'">
                                     <div>
                                         <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Kode OTP</label>
-                                        <input type="text" x-model="form.otp" placeholder="123456" class="input-tech w-full rounded-lg p-3 text-lg font-mono text-center tracking-[0.3em] font-bold text-cyan-400">
+                                        <input type="text" x-model="form.otp" placeholder="123456" class="input-tech w-full rounded-lg p-3 text-lg font-mono text-center tracking-[0.3em] font-bold text-taveve-400">
                                     </div>
                                 </template>
 
@@ -178,11 +187,24 @@ module.exports = () => `
                                         </div>
                                     </div>
                                 </template>
+
+                                <template x-if="selectedFeature === 'decode'">
+                                    <div class="space-y-4">
+                                        <div>
+                                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Upload Foto QRIS</label>
+                                            <input type="file" @change="handleFileSelect" accept="image/*" class="input-tech w-full rounded-lg p-3 text-sm cursor-pointer">
+                                            <p class="text-xs text-slate-500 mt-1">Format: JPG, PNG (max 5MB)</p>
+                                        </div>
+                                        <div x-show="imagePreview" class="border border-dashed border-taveve-500/30 rounded-lg p-3">
+                                            <img :src="imagePreview" class="max-h-40 mx-auto rounded" alt="Preview">
+                                        </div>
+                                    </div>
+                                </template>
                             </div>
 
                             <button type="submit" :disabled="loading" 
                                 class="w-full py-3.5 rounded-lg font-bold text-sm uppercase tracking-wider transition-all relative overflow-hidden group"
-                                :class="loading ? 'bg-slate-800 text-slate-500' : 'bg-cyan-600 hover:bg-cyan-500 text-white shadow-[0_0_20px_rgba(6,182,212,0.3)]'">
+                                :class="loading ? 'bg-slate-800 text-slate-500' : 'bg-gradient-to-r from-taveve-600 to-taveve-500 hover:from-taveve-500 hover:to-taveve-600 text-white shadow-[0_0_30px_rgba(245,166,35,0.5)]'">
                                 <span class="relative z-10 flex items-center justify-center gap-2">
                                     <span x-show="!loading">Execute Request</span>
                                     <span x-show="loading">Processing...</span>
@@ -194,7 +216,7 @@ module.exports = () => `
             </div>
 
             <div class="lg:col-span-8">
-                <div class="glass rounded-2xl h-[600px] flex flex-col overflow-hidden border-t-4 border-t-cyan-500">
+                <div class="glass rounded-2xl h-[600px] flex flex-col overflow-hidden border-t-4 border-t-taveve-500">
                     <div class="bg-[#050505] border-b border-slate-800 p-3 flex justify-between items-center px-6">
                         <div class="flex gap-2">
                             <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
@@ -206,11 +228,11 @@ module.exports = () => `
 
                     <div class="flex-1 bg-[#050505] p-6 overflow-auto font-mono text-xs relative custom-scrollbar">
                         <div x-show="!response && !loading" class="absolute inset-0 flex flex-col items-center justify-center opacity-20">
-                            <svg class="w-20 h-20 text-cyan-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
-                            <p class="text-cyan-400 font-bold tracking-widest">AWAITING INPUT_</p>
+                            <svg class="w-20 h-20 text-taveve-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
+                            <p class="text-taveve-300 font-bold tracking-widest">AWAITING INPUT_</p>
                         </div>
                         <div x-show="loading" class="absolute inset-0 flex items-center justify-center bg-black/80 z-20 backdrop-blur-sm transition-all">
-                            <div class="w-16 h-16 border-4 border-cyan-900 border-t-cyan-400 rounded-full animate-spin"></div>
+                            <div class="w-16 h-16 border-4 border-taveve-900 border-t-taveve-400 rounded-full animate-spin"></div>
                         </div>
                         <template x-if="qrImage">
                             <div class="mb-8 flex gap-6 items-center p-6 bg-slate-900/40 rounded-xl border border-dashed border-slate-700">
@@ -234,43 +256,50 @@ module.exports = () => `
 
         <div x-show="activeTab === 'docs'" x-transition.opacity.duration.300ms class="space-y-8 pb-20">
             
-            <div class="glass p-8 rounded-2xl text-center border-t-4 border-t-purple-500">
+            <div class="glass p-8 rounded-2xl text-center border-t-4 border-t-taveve-500">
                 <h2 class="text-2xl font-bold text-white mb-3">Dokumentasi & Panduan</h2>
                 <p class="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed">
-                    Panduan lengkap integrasi API. Gunakan Method <span class="text-cyan-400 font-mono font-bold">POST</span> dan format Body <span class="text-cyan-400 font-mono font-bold">JSON</span>. Pastikan Anda memiliki akun OrderKuota yang aktif sebelum memulai.
+                    Panduan lengkap integrasi API. Gunakan Method <span class="text-taveve-400 font-mono font-bold">POST</span> dan format Body <span class="text-taveve-400 font-mono font-bold">JSON</span>. Pastikan Anda memiliki akun OrderKuota yang aktif sebelum memulai.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 gap-8">
                 
                 <div class="space-y-4">
-                    <h3 class="text-lg font-bold text-cyan-400 flex items-center gap-2">
-                        <span class="px-2 py-1 bg-cyan-900/50 rounded border border-cyan-800 text-xs">MODULE 01</span> Authentication
+                    <h3 class="text-lg font-bold text-taveve-300 flex items-center gap-2">
+                        <span class="px-2 py-1 bg-taveve-950/70 rounded border border-taveve-800 text-xs">MODULE 01</span> Authentication
                     </h3>
                     
                     <div class="glass p-6 rounded-xl border-l-2 border-l-slate-600 hover:border-l-cyan-500 transition-colors">
                         <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
                             <div>
                                 <h4 class="font-bold text-white text-lg">1. Request OTP (Login)</h4>
-                                <p class="text-slate-400 text-sm mt-1">Langkah pertama. Gunakan endpoint ini untuk memicu pengiriman kode OTP ke WhatsApp nomor terdaftar.</p>
+                                <p class="text-slate-400 text-sm mt-1">Langkah pertama. Gunakan endpoint ini untuk memicu pengiriman kode OTP ke Email terdaftar.</p>
                             </div>
-                            <code class="text-xs bg-black px-3 py-2 rounded border border-slate-800 text-cyan-400 font-mono">POST /api/auth/login</code>
+                            <code class="text-xs bg-black px-3 py-2 rounded border border-slate-800 text-taveve-400 font-mono">POST /api/auth/login</code>
                         </div>
                         
                         <div class="grid md:grid-cols-2 gap-6 mt-6">
                             <div>
                                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
                                 <ul class="text-sm text-slate-300 space-y-2">
-                                    <li class="flex gap-2"><span class="text-cyan-400 font-mono bg-cyan-950/30 px-1 rounded">username</span> : Username terdaftar.</li>
-                                    <li class="flex gap-2"><span class="text-cyan-400 font-mono bg-cyan-950/30 px-1 rounded">password</span> : Kata sandi akun OrderKuota.</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">username</span> : Username terdaftar.</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">password</span> : Kata sandi akun OrderKuota.</li>
                                 </ul>
                             </div>
                             <div>
-                                <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Example JSON</h5>
-                                <pre class="bg-black/50 p-4 rounded-lg text-xs text-slate-300 border border-slate-800 overflow-x-auto">
+                                <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
+                                <pre class="bg-black/50 p-4 rounded-lg text-xs text-green-400 border border-slate-800 overflow-x-auto">
 {
-  "username": "adminganteng",
-  "password": "rahasia_banget"
+  "status": true,
+  "message": "Success",
+  "data": {
+    "success": true,
+    "results": {
+      "otp": "email",
+      "otp_value": "user************mail.com"
+    }
+  }
 }</pre>
                             </div>
                         </div>
@@ -280,27 +309,35 @@ module.exports = () => `
                         <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
                             <div>
                                 <h4 class="font-bold text-white text-lg">2. Verify OTP (Get Token)</h4>
-                                <p class="text-slate-400 text-sm mt-1">Tukar kode OTP yang diterima di WhatsApp menjadi <b>Auth Token</b>. Token ini wajib disimpan untuk akses API lainnya.</p>
+                                <p class="text-slate-400 text-sm mt-1">Tukar kode OTP yang diterima di Email menjadi <b>Auth Token</b>. Token ini wajib disimpan untuk akses API lainnya.</p>
                             </div>
-                            <code class="text-xs bg-black px-3 py-2 rounded border border-slate-800 text-cyan-400 font-mono">POST /api/auth/verify</code>
+                            <code class="text-xs bg-black px-3 py-2 rounded border border-slate-800 text-taveve-400 font-mono">POST /api/auth/verify</code>
                         </div>
                         
                         <div class="grid md:grid-cols-2 gap-6 mt-6">
                             <div>
                                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
                                 <ul class="text-sm text-slate-300 space-y-2">
-                                    <li class="flex gap-2"><span class="text-cyan-400 font-mono bg-cyan-950/30 px-1 rounded">username</span> : username yang sama.</li>
-                                    <li class="flex gap-2"><span class="text-cyan-400 font-mono bg-cyan-950/30 px-1 rounded">otp</span> : Kode 6 digit dari WhatsApp.</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">username</span> : username yang sama.</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">otp</span> : Kode 6 digit dari Email.</li>
                                 </ul>
                             </div>
                             <div>
                                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
                                 <pre class="bg-black/50 p-4 rounded-lg text-xs text-green-400 border border-slate-800 overflow-x-auto">
 {
-  "success": true,
-  "data": { 
-      "auth_token": "eyJhbGciOiJI...",
-      "username": "admin..." 
+  "status": true,
+  "message": "Success",
+  "data": {
+    "success": true,
+    "results": {
+      "otp": "",
+      "id": "123456",
+      "name": "demouser",
+      "username": "demouser",
+      "balance": "500000",
+      "token": "123456:aBcDeFgHiJkLmNoPqRsTuVwXyZ1234567890"
+    }
   }
 }</pre>
                             </div>
@@ -309,8 +346,8 @@ module.exports = () => `
                 </div>
 
                 <div class="space-y-4">
-                    <h3 class="text-lg font-bold text-purple-400 flex items-center gap-2">
-                        <span class="px-2 py-1 bg-purple-900/50 rounded border border-purple-800 text-xs">MODULE 02</span> QRIS Payment
+                    <h3 class="text-lg font-bold text-taveve-200 flex items-center gap-2">
+                        <span class="px-2 py-1 bg-taveve-950/70 rounded border border-taveve-800 text-xs">MODULE 02</span> QRIS Payment
                     </h3>
                     
                     <div class="glass p-6 rounded-xl border-l-2 border-l-slate-600 hover:border-l-purple-500 transition-colors">
@@ -319,26 +356,82 @@ module.exports = () => `
                                 <h4 class="font-bold text-white text-lg">3. Cek Mutasi QRIS</h4>
                                 <p class="text-slate-400 text-sm mt-1">Mengambil 4 transaksi QRIS terakhir yang masuk (Status: IN). Berguna untuk verifikasi pembayaran otomatis.</p>
                             </div>
-                            <code class="text-xs bg-black px-3 py-2 rounded border border-slate-800 text-purple-400 font-mono">POST /api/qris/mutasi</code>
+                            <code class="text-xs bg-black px-3 py-2 rounded border border-slate-800 text-taveve-300 font-mono">POST /api/qris/mutasi</code>
                         </div>
                         
                         <div class="grid md:grid-cols-2 gap-6 mt-6">
                             <div>
                                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
                                 <ul class="text-sm text-slate-300 space-y-2">
-                                    <li class="flex gap-2"><span class="text-purple-400 font-mono bg-purple-950/30 px-1 rounded">auth_username</span> : Username Login.</li>
-                                    <li class="flex gap-2"><span class="text-purple-400 font-mono bg-purple-950/30 px-1 rounded">auth_token</span> : Token dari hasil Verify OTP.</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">auth_username</span> : Username Login.</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">auth_token</span> : Token dari hasil Verify OTP.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example (4 transaksi terakhir)</h5>
+                                <pre class="bg-black/50 p-4 rounded-lg text-xs text-green-400 border border-slate-800 overflow-x-auto">
+{
+  "status": true,
+  "data": {
+    "qris_history": {
+      "total": 50,
+      "page": 1,
+      "results": [
+        {
+          "id": 123456789,
+          "kredit": "10.000",
+          "saldo_akhir": "100.000",
+          "keterangan": "NOBU / JOHN DOE",
+          "tanggal": "24/01/2026 18:23",
+          "status": "IN",
+          "brand": {
+            "name": "GoPay"
+          }
+        },
+        // ... 3 more transactions
+      ]
+    },
+    "account": {
+      "username": "demouser",
+      "balance": 500000,
+      "qris_balance": 100000,
+      "qris_name": "TOKO DEMO"
+    }
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass p-6 rounded-xl border-l-2 border-l-slate-600 hover:border-l-taveve-400 transition-colors">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h4 class="font-bold text-white text-lg">4. Decode QRIS dari Foto</h4>
+                                <p class="text-slate-400 text-sm mt-1">Upload foto QRIS untuk mendapatkan raw string-nya. Berguna untuk convert static QRIS fisik ke digital.</p>
+                            </div>
+                            <code class="text-xs bg-black px-3 py-2 rounded border border-slate-800 text-taveve-300 font-mono">POST /api/qris/decode</code>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
+                                <ul class="text-sm text-slate-300 space-y-2">
+                                    <li class="flex flex-col mb-2">
+                                        <span class="text-taveve-400 font-mono bg-taveve-950/30 w-fit px-1 rounded mb-1">image</span>
+                                        <span class="text-xs text-slate-500">File gambar QRIS (JPG/PNG, max 5MB). Gunakan multipart/form-data.</span>
+                                    </li>
                                 </ul>
                             </div>
                             <div>
                                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
                                 <pre class="bg-black/50 p-4 rounded-lg text-xs text-green-400 border border-slate-800 overflow-x-auto">
 {
-  "success": true,
-  "data": { 
-      "qris_history": { 
-          "results": [ ...list transaksi... ] 
-      } 
+  "status": true,
+  "message": "Success",
+  "data": {
+    "qris_string": "00020101021126...",
+    "filename": "qris.jpg",
+    "size": 245678
   }
 }</pre>
                             </div>
@@ -348,10 +441,10 @@ module.exports = () => `
                     <div class="glass p-6 rounded-xl border-l-2 border-l-slate-600 hover:border-l-purple-500 transition-colors">
                         <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
                             <div>
-                                <h4 class="font-bold text-white text-lg">4. Generate Dynamic QRIS</h4>
+                                <h4 class="font-bold text-white text-lg">5. Generate Dynamic QRIS</h4>
                                 <p class="text-slate-400 text-sm mt-1">Membuat kode QRIS baru dengan nominal yang sudah tertanam (Static to Dynamic). Output berupa base64 image.</p>
                             </div>
-                            <code class="text-xs bg-black px-3 py-2 rounded border border-slate-800 text-purple-400 font-mono">POST /api/qris/dynamic</code>
+                            <code class="text-xs bg-black px-3 py-2 rounded border border-slate-800 text-taveve-300 font-mono">POST /api/qris/dynamic</code>
                         </div>
                         
                         <div class="grid md:grid-cols-2 gap-6 mt-6">
@@ -359,18 +452,24 @@ module.exports = () => `
                                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
                                 <ul class="text-sm text-slate-300 space-y-2">
                                     <li class="flex flex-col mb-2">
-                                        <span class="text-purple-400 font-mono bg-purple-950/30 w-fit px-1 rounded mb-1">base_string</span>
+                                        <span class="text-taveve-400 font-mono bg-taveve-950/30 w-fit px-1 rounded mb-1">base_string</span>
                                         <span class="text-xs text-slate-500">String text dari QRIS Toko Asli Anda (bisa didapat dari scan QRIS toko pakai aplikasi scanner).</span>
                                     </li>
-                                    <li class="flex gap-2"><span class="text-purple-400 font-mono bg-purple-950/30 px-1 rounded">amount</span> : Nominal Rupiah (Int).</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">amount</span> : Nominal Rupiah (Int).</li>
                                 </ul>
                             </div>
                             <div>
-                                <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Example JSON</h5>
-                                <pre class="bg-black/50 p-4 rounded-lg text-xs text-slate-300 border border-slate-800 overflow-x-auto">
+                                <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
+                                <pre class="bg-black/50 p-4 rounded-lg text-xs text-green-400 border border-slate-800 overflow-x-auto">
 {
-  "base_string": "00020101021226...",
-  "amount": 50000
+  "status": true,
+  "message": "Success",
+  "data": {
+    "original_string": "00020101021126...",
+    "amount": 50000,
+    "dynamic_string": "00020101021226...",
+    "qr_image": "data:image/png;base64,iVBORw0KG..."
+  }
 }</pre>
                             </div>
                         </div>
@@ -396,6 +495,8 @@ module.exports = () => `
                 status: 'READY',
                 response: '',
                 qrImage: null,
+                imagePreview: null,
+                selectedFile: null,
                 form: {
                     username: '', password: '', otp: '', 
                     token: '', base_string: '', amount: ''
@@ -403,7 +504,20 @@ module.exports = () => `
                 resetForm() {
                     this.response = '';
                     this.qrImage = null;
+                    this.imagePreview = null;
+                    this.selectedFile = null;
                     this.status = 'READY';
+                },
+                handleFileSelect(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        this.selectedFile = file;
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            this.imagePreview = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
                 },
                 async sendRequest() {
                     this.loading = true;
@@ -426,15 +540,36 @@ module.exports = () => `
                     } else if (this.selectedFeature === 'dynamic') {
                         endpoint = '/api/qris/dynamic';
                         payload = { base_string: this.form.base_string, amount: this.form.amount };
+                    } else if (this.selectedFeature === 'decode') {
+                        endpoint = '/api/qris/decode';
+                        // For file upload, we'll handle it differently
                     }
 
                     try {
-                        const res = await fetch(endpoint, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-                        const data = await res.json();
+                        let res, data;
+                        
+                        if (this.selectedFeature === 'decode') {
+                            // File upload dengan FormData
+                            if (!this.selectedFile) {
+                                throw new Error('Please select an image file');
+                            }
+                            const formData = new FormData();
+                            formData.append('image', this.selectedFile);
+                            
+                            res = await fetch(endpoint, {
+                                method: 'POST',
+                                body: formData
+                            });
+                        } else {
+                            // Regular JSON request
+                            res = await fetch(endpoint, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload)
+                            });
+                        }
+                        
+                        data = await res.json();
                         
                         this.status = res.status === 200 ? 'SUCCESS (200)' : 'ERROR (' + res.status + ')';
                         this.response = JSON.stringify(data, null, 2);
