@@ -2,7 +2,7 @@
 module.exports = {
   app: {
     name: "Taveve API Gateway",
-    version: "1.0",
+    version: "2.0",
     maintainer: "ByDede",
   },
 
