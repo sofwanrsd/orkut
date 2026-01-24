@@ -14,10 +14,10 @@ module.exports = {
     // Data Identitas Perangkat Baru
     device: {
       app_reg_id:
-        "e5aCENGrQOWvhQWYnv-uNc:APA91bFj3O_mv5Nf_2SM4Duz4Z8Ug3nBNaHlgodlY92CBuNIA9xmc0Dahev5xxqssPmnTdcie4mlhiG9ZAE1iCe1QbyhxcUyGXlenJxiUaXdfm1rklOEo9k",
-      phone_uuid: "e5aCENGrQOWvhQWYnv-uNc",
-      phone_model: "sdk_gphone64_x86_64",
-      phone_android_version: "16",
+        "feWAyrROTHe_RYH3Sbruw8:APA91bFbdiCCuyMLLTtieOr4W5fiSlzPHwUOe9w75UwmiHt7zywlgKi_zlKi5WUSq6pJdqHNkRD7J98p2hU7UBKK5R2wh5xcOQRhLoyb9PNWXTDiFmjrua4",
+      phone_uuid: "feWAyrROTHe_RYH3Sbruw8",
+      phone_model: "23124RA7EO",
+      phone_android_version: "15",
       app_version_code: "260115",
       app_version_name: "26.01.15",
       ui_mode: "light",
