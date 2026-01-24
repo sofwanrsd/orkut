@@ -13,13 +13,12 @@ module.exports = {
 
     // Data Identitas Perangkat Baru
     device: {
-      app_reg_id:
-        "di309HvATsaiCppl5eDpoc:APA91bFUcTOH8h2XHdPRz2qQ5Bezn-3_TaycFcJ5pNLGWpmaxheQP9Ri0E56wLHz0_b1vcss55jbRQXZgc9loSfBdNa5nZJZVMlk7GS1JDMGyFUVvpcwXbMDg8tjKGZAurCGR4kDMDRJ",
-      phone_uuid: "di309HvATsaiCppl5eDpoc",
-      phone_model: "SM-G960N",
-      phone_android_version: "16",
-      app_version_code: "250811",
-      app_version_name: "25.08.11",
+      app_reg_id: "czmk8DcrQzes8FZcI7XpCX:APA91bEOwn07D8Q1u2_m12pv4rMDz3XS522SfkcbdatQaUvcDRPakaTqK3ENMyT52dSDauaSLo3II13P15juQGSmuKOfg58qQ5GFC0ZKnq6Qd1Q4Oq1jorA",
+      phone_uuid: "czmk8DcrQzes8FZcI7XpCX",
+      phone_model: "Infinix X678B",
+      phone_android_version: "14",
+      app_version_code: "260115",
+      app_version_name: "26.01.15",
       ui_mode: "light",
     },
   },
