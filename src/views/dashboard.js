@@ -3,222 +3,181 @@ const settings = require("../config/settings");
 
 module.exports = () => `
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${settings.app.name} - API Gateway</title>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-    
+
     <script>
       tailwind.config = {
-        darkMode: 'class',
         theme: {
           extend: {
-            fontFamily: { 
-                sans: ['Inter', 'system-ui', 'sans-serif'],
-                mono: ['JetBrains Mono', 'monospace'] 
+            fontFamily: {
+                sans: ['system-ui', 'sans-serif'],
+                mono: ['ui-monospace', 'monospace']
             },
-            colors: { 
-                taveve: { 
-                    50: '#fffbf0',
-                    100: '#fff3d6',
-                    200: '#ffe7ad',
-                    300: '#ffd478',
+            colors: {
+                taveve: {
                     400: '#ffb84d',
                     500: '#F5A623',
                     600: '#e68a00',
-                    700: '#c77200',
                     800: '#9e5b00',
-                    900: '#7a4600',
-                    950: '#4d2c00'
-                },
-                orange: {
-                    DEFAULT: '#F5A623',
-                    dark: '#c77200',
-                    light: '#ffb84d'
+                    950: '#2d1a00'
                 }
-            },
-            animation: {
-                'pulse-glow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
             }
           }
         }
       }
     </script>
     <style>
-       /* --- TAVEVE ORANGE THEME --- */
-       body { 
-           background: linear-gradient(135deg, #1a1108 0%, #2d1e0f 50%, #1a1108 100%);
-           background-attachment: fixed;
-           color: #f1f5f9;
+       body {
+           background-color: #000;
+           color: #e2e8f0;
        }
-       .glass { 
-           background: rgba(26, 17, 8, 0.85); 
-           backdrop-filter: blur(12px);
-           -webkit-backdrop-filter: blur(12px);
-           border: 1px solid rgba(245, 166, 35, 0.2);
-           box-shadow: 0 8px 32px 0 rgba(245, 166, 35, 0.15);
+       .card {
+           background: #0d0d0d;
+           border: 1px solid #222;
        }
-       .input-tech {
-           background: rgba(26, 17, 8, 0.7);
-           border: 1px solid rgba(245, 166, 35, 0.25);
+       .input-field {
+           background: #000;
+           border: 1px solid #2a2a2a;
            color: #fff;
-           transition: all 0.3s ease;
        }
-       .input-tech:focus {
+       .input-field:focus {
            border-color: #F5A623;
-           box-shadow: 0 0 15px rgba(245, 166, 35, 0.4);
            outline: none;
        }
        ::-webkit-scrollbar { width: 6px; height: 6px; }
        ::-webkit-scrollbar-track { background: transparent; }
-       ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-       ::-webkit-scrollbar-thumb:hover { background: #F5A623; }
+       ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
        pre { white-space: pre-wrap; word-wrap: break-word; }
     </style>
 </head>
-<body class="antialiased min-h-screen p-4 md:p-8 flex flex-col items-center selection:bg-cyan-500/30 selection:text-cyan-200">
+<body class="min-h-screen p-4 md:p-8 flex flex-col items-center">
 
-    <header class="w-full max-w-6xl mb-10 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-        <div class="flex items-center gap-5">
-            <div class="relative group">
-                <div class="absolute -inset-1 bg-gradient-to-r from-taveve-600 to-orange rounded-lg blur opacity-60 group-hover:opacity-90 transition duration-200"></div>
-                <div class="relative h-14 w-14 bg-slate-900 rounded-lg flex items-center justify-center border border-taveve-800">
-                    <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-taveve-400 to-taveve-500">T</span>
-                </div>
+    <header class="w-full max-w-5xl mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+            <div class="h-12 w-12 bg-taveve-950 rounded border border-taveve-800 flex items-center justify-center">
+                <span class="text-xl font-bold text-taveve-400">T</span>
             </div>
             <div>
-                <h1 class="text-3xl font-bold text-white tracking-tight">${settings.app.name}</h1>
-                <div class="flex items-center gap-2 mt-1">
-                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-taveve-950 text-taveve-300 border border-taveve-800">v${settings.app.version}</span>
-                    <span class="text-xs text-slate-500 font-mono">Serverless</span>
+                <h1 class="text-2xl font-bold text-white">${settings.app.name}</h1>
+                <div class="flex items-center gap-2 mt-0.5">
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-taveve-950 text-taveve-400 border border-taveve-800">v${settings.app.version}</span>
+                    <span class="text-xs text-slate-500 font-mono">API Gateway</span>
                 </div>
             </div>
         </div>
-        
-        <div class="glass px-5 py-2 rounded-full flex items-center gap-3">
-            <span class="relative flex h-3 w-3">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-            </span>
-            <span class="text-xs font-mono font-bold text-green-400 tracking-wider">SYSTEM ONLINE</span>
-        </div>
+
     </header>
 
-    <main class="w-full max-w-6xl relative z-10" x-data="appLogic()">
-        
-        <div class="flex gap-6 mb-8 border-b border-slate-800">
-            <button @click="activeTab = 'console'" 
-                :class="activeTab === 'console' ? 'text-taveve-400 border-taveve-500' : 'text-slate-500 border-transparent hover:text-slate-300'"
-                class="pb-3 px-1 text-sm font-bold uppercase tracking-widest border-b-2 transition-all duration-300 flex items-center gap-2">
-                <span>⚡ Console</span>
+    <main class="w-full max-w-5xl" x-data="appLogic()">
+
+        <div class="flex gap-4 mb-6 border-b border-slate-800">
+            <button @click="activeTab = 'console'"
+                :class="activeTab === 'console' ? 'text-taveve-400 border-taveve-500' : 'text-slate-500 border-transparent'"
+                class="pb-3 px-1 text-sm font-bold uppercase tracking-widest border-b-2">
+                Console
             </button>
-            <button @click="activeTab = 'docs'" 
-                :class="activeTab === 'docs' ? 'text-taveve-300 border-taveve-400' : 'text-slate-500 border-transparent hover:text-slate-300'"
-                class="pb-3 px-1 text-sm font-bold uppercase tracking-widest border-b-2 transition-all duration-300 flex items-center gap-2">
-                <span>📚 Docs</span>
+            <button @click="activeTab = 'docs'"
+                :class="activeTab === 'docs' ? 'text-taveve-400 border-taveve-500' : 'text-slate-500 border-transparent'"
+                class="pb-3 px-1 text-sm font-bold uppercase tracking-widest border-b-2">
+                Docs
             </button>
         </div>
 
-        <div x-show="activeTab === 'console'" x-transition.opacity.duration.300ms class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
+        <div x-show="activeTab === 'console'" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
             <div class="lg:col-span-4">
-                <div class="glass rounded-2xl p-1">
-                    <div class="bg-slate-900/50 rounded-xl p-6">
-                        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                            <span class="w-2 h-2 bg-taveve-500 rounded-full"></span> Request Config
-                        </h2>
-                        
-                        <form @submit.prevent="sendRequest" class="space-y-5">
-                            <div class="relative group">
-                                <label class="block text-[10px] font-bold text-taveve-400 uppercase mb-1.5">Target Endpoint</label>
-                                <select x-model="selectedFeature" @change="resetForm()" class="input-tech w-full rounded-lg p-3 text-sm cursor-pointer appearance-none">
-                                    <option value="login">🔐 Login (Request OTP)</option>
-                                    <option value="verify">✅ Verify OTP (Get Token)</option>
-                                    <option value="mutasi">💰 Cek Mutasi QRIS</option>
-                                    <option value="decode">📷 Decode QRIS dari Foto</option>
-                                    <option value="dynamic">🔁 Buat Dynamic QRIS</option>
-                                </select>
-                                <div class="absolute right-4 top-[2.4rem] text-taveve-400 pointer-events-none text-xs">▼</div>
-                            </div>
+                <div class="card rounded-xl p-5">
+                    <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-5">Request Config</h2>
 
-                            <div class="space-y-4" x-transition>
-                                <template x-if="['login', 'verify', 'mutasi'].includes(selectedFeature)">
+                    <form @submit.prevent="sendRequest" class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-taveve-400 uppercase mb-1">Target Endpoint</label>
+                            <select x-model="selectedFeature" @change="resetForm()" class="input-field w-full rounded p-2.5 text-sm cursor-pointer">
+                                <option value="login">Login (Request OTP)</option>
+                                <option value="verify">Verify OTP (Get Token)</option>
+                                <option value="mutasi">Cek Mutasi QRIS</option>
+                                <option value="decode">Decode QRIS dari Foto</option>
+                                <option value="dynamic">Buat Dynamic QRIS</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-3">
+                            <template x-if="['login', 'verify', 'mutasi'].includes(selectedFeature)">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Username / AuthToken</label>
+                                    <input type="text" x-model="form.username" placeholder="adminganteng" class="input-field w-full rounded p-2.5 text-sm font-mono">
+                                </div>
+                            </template>
+
+                            <template x-if="selectedFeature === 'login'">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Password</label>
+                                    <input type="password" x-model="form.password" class="input-field w-full rounded p-2.5 text-sm font-mono">
+                                </div>
+                            </template>
+
+                            <template x-if="selectedFeature === 'verify'">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Kode OTP</label>
+                                    <input type="text" x-model="form.otp" placeholder="123456" class="input-field w-full rounded p-2.5 text-lg font-mono text-center tracking-[0.3em] font-bold text-taveve-400">
+                                </div>
+                            </template>
+
+                            <template x-if="selectedFeature === 'mutasi'">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Auth Token</label>
+                                    <input type="text" x-model="form.token" placeholder="ey..." class="input-field w-full rounded p-2.5 text-xs font-mono">
+                                </div>
+                            </template>
+
+                            <template x-if="selectedFeature === 'dynamic'">
+                                <div class="space-y-3">
                                     <div>
-                                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Username / AuthToken</label>
-                                        <input type="text" x-model="form.username" placeholder="adminganteng" class="input-tech w-full rounded-lg p-3 text-sm font-mono">
+                                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">String QRIS Asli</label>
+                                        <textarea x-model="form.base_string" rows="3" placeholder="000201..." class="input-field w-full rounded p-2.5 text-xs font-mono"></textarea>
                                     </div>
-                                </template>
-
-                                <template x-if="selectedFeature === 'login'">
                                     <div>
-                                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Password</label>
-                                        <input type="password" x-model="form.password" class="input-tech w-full rounded-lg p-3 text-sm font-mono">
+                                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Nominal (Rp)</label>
+                                        <input type="number" x-model="form.amount" class="input-field w-full rounded p-2.5 text-sm font-mono">
                                     </div>
-                                </template>
+                                </div>
+                            </template>
 
-                                <template x-if="selectedFeature === 'verify'">
+                            <template x-if="selectedFeature === 'decode'">
+                                <div class="space-y-3">
                                     <div>
-                                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Kode OTP</label>
-                                        <input type="text" x-model="form.otp" placeholder="123456" class="input-tech w-full rounded-lg p-3 text-lg font-mono text-center tracking-[0.3em] font-bold text-taveve-400">
+                                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Upload Foto QRIS</label>
+                                        <input type="file" @change="handleFileSelect" accept="image/*" class="input-field w-full rounded p-2.5 text-sm cursor-pointer">
+                                        <p class="text-xs text-slate-500 mt-1">Format: JPG, PNG (max 5MB)</p>
                                     </div>
-                                </template>
-
-                                <template x-if="selectedFeature === 'mutasi'">
-                                    <div>
-                                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Auth Token</label>
-                                        <input type="text" x-model="form.token" placeholder="ey..." class="input-tech w-full rounded-lg p-3 text-xs font-mono">
+                                    <div x-show="imagePreview" class="border border-slate-700 rounded p-2">
+                                        <img :src="imagePreview" class="max-h-36 mx-auto rounded" alt="Preview">
                                     </div>
-                                </template>
+                                </div>
+                            </template>
+                        </div>
 
-                                <template x-if="selectedFeature === 'dynamic'">
-                                    <div class="space-y-4">
-                                        <div>
-                                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">String QRIS Asli</label>
-                                            <textarea x-model="form.base_string" rows="3" placeholder="000201..." class="input-tech w-full rounded-lg p-3 text-xs font-mono"></textarea>
-                                        </div>
-                                        <div>
-                                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Nominal (Rp)</label>
-                                            <input type="number" x-model="form.amount" class="input-tech w-full rounded-lg p-3 text-sm font-mono">
-                                        </div>
-                                    </div>
-                                </template>
-
-                                <template x-if="selectedFeature === 'decode'">
-                                    <div class="space-y-4">
-                                        <div>
-                                            <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Upload Foto QRIS</label>
-                                            <input type="file" @change="handleFileSelect" accept="image/*" class="input-tech w-full rounded-lg p-3 text-sm cursor-pointer">
-                                            <p class="text-xs text-slate-500 mt-1">Format: JPG, PNG (max 5MB)</p>
-                                        </div>
-                                        <div x-show="imagePreview" class="border border-dashed border-taveve-500/30 rounded-lg p-3">
-                                            <img :src="imagePreview" class="max-h-40 mx-auto rounded" alt="Preview">
-                                        </div>
-                                    </div>
-                                </template>
-                            </div>
-
-                            <button type="submit" :disabled="loading" 
-                                class="w-full py-3.5 rounded-lg font-bold text-sm uppercase tracking-wider transition-all relative overflow-hidden group"
-                                :class="loading ? 'bg-slate-800 text-slate-500' : 'bg-gradient-to-r from-taveve-600 to-taveve-500 hover:from-taveve-500 hover:to-taveve-600 text-white shadow-[0_0_30px_rgba(245,166,35,0.5)]'">
-                                <span class="relative z-10 flex items-center justify-center gap-2">
-                                    <span x-show="!loading">Execute Request</span>
-                                    <span x-show="loading">Processing...</span>
-                                </span>
-                            </button>
-                        </form>
-                    </div>
+                        <button type="submit" :disabled="loading"
+                            class="w-full py-3 rounded font-bold text-sm uppercase tracking-wider"
+                            :class="loading ? 'bg-slate-800 text-slate-500 cursor-not-allowed' : 'bg-taveve-600 hover:bg-taveve-500 text-white'">
+                            <span x-show="!loading">Execute Request</span>
+                            <span x-show="loading">Processing...</span>
+                        </button>
+                    </form>
                 </div>
             </div>
 
             <div class="lg:col-span-8">
-                <div class="glass rounded-2xl h-[600px] flex flex-col overflow-hidden border-t-4 border-t-taveve-500">
-                    <div class="bg-[#050505] border-b border-slate-800 p-3 flex justify-between items-center px-6">
-                        <div class="flex gap-2">
+                <div class="card rounded-xl h-[580px] flex flex-col overflow-hidden border-t-2 border-t-taveve-500">
+                    <div class="bg-black border-b border-slate-800 p-3 flex justify-between items-center px-5">
+                        <div class="flex gap-1.5">
                             <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
                             <div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
                             <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
@@ -226,27 +185,26 @@ module.exports = () => `
                         <span class="font-mono text-xs text-slate-500" x-text="status"></span>
                     </div>
 
-                    <div class="flex-1 bg-[#050505] p-6 overflow-auto font-mono text-xs relative custom-scrollbar">
-                        <div x-show="!response && !loading" class="absolute inset-0 flex flex-col items-center justify-center opacity-20">
-                            <svg class="w-20 h-20 text-taveve-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
-                            <p class="text-taveve-300 font-bold tracking-widest">AWAITING INPUT_</p>
+                    <div class="flex-1 bg-black p-5 overflow-auto font-mono text-xs relative">
+                        <div x-show="!response && !loading" class="absolute inset-0 flex flex-col items-center justify-center text-slate-700">
+                            <p class="font-bold tracking-widest">AWAITING INPUT</p>
                         </div>
-                        <div x-show="loading" class="absolute inset-0 flex items-center justify-center bg-black/80 z-20 backdrop-blur-sm transition-all">
-                            <div class="w-16 h-16 border-4 border-taveve-900 border-t-taveve-400 rounded-full animate-spin"></div>
+                        <div x-show="loading" class="absolute inset-0 flex items-center justify-center bg-black/80 z-20">
+                            <span class="text-taveve-400 font-mono text-sm">Processing...</span>
                         </div>
                         <template x-if="qrImage">
-                            <div class="mb-8 flex gap-6 items-center p-6 bg-slate-900/40 rounded-xl border border-dashed border-slate-700">
-                                <div class="bg-white p-2 rounded-lg shadow-lg">
+                            <div class="mb-6 flex gap-5 items-center p-5 bg-slate-900/50 rounded border border-slate-800">
+                                <div class="bg-white p-2 rounded">
                                     <img :src="qrImage" class="w-32 h-32 md:w-40 md:h-40">
                                 </div>
                                 <div>
-                                    <h3 class="text-white font-bold text-lg mb-1">QR Generated!</h3>
-                                    <p class="text-slate-400 mb-4">Scan using any payment app.</p>
-                                    <a :href="qrImage" download="qris_dynamic.png" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-bold border border-slate-600 transition">Download .PNG</a>
+                                    <h3 class="text-white font-bold text-base mb-1">QR Generated!</h3>
+                                    <p class="text-slate-400 mb-3 text-xs">Scan using any payment app.</p>
+                                    <a :href="qrImage" download="qris_dynamic.png" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-bold border border-slate-600">Download .PNG</a>
                                 </div>
                             </div>
                         </template>
-                        <div x-show="response" class="relative z-10">
+                        <div x-show="response">
                             <pre class="text-emerald-400 leading-relaxed" x-text="response"></pre>
                         </div>
                     </div>
@@ -254,42 +212,42 @@ module.exports = () => `
             </div>
         </div>
 
-        <div x-show="activeTab === 'docs'" x-transition.opacity.duration.300ms class="space-y-8 pb-20">
-            
-            <div class="glass p-8 rounded-2xl text-center border-t-4 border-t-taveve-500">
-                <h2 class="text-2xl font-bold text-white mb-3">Dokumentasi & Panduan</h2>
-                <p class="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed">
+        <div x-show="activeTab === 'docs'" class="space-y-6 pb-16">
+
+            <div class="card p-6 rounded-xl border-t-2 border-t-taveve-500">
+                <h2 class="text-xl font-bold text-white mb-2">Dokumentasi & Panduan</h2>
+                <p class="text-slate-400 text-sm leading-relaxed">
                     Panduan lengkap integrasi API. Gunakan Method <span class="text-taveve-400 font-mono font-bold">POST</span> dan format Body <span class="text-taveve-400 font-mono font-bold">JSON</span>. Pastikan Anda memiliki akun OrderKuota yang aktif sebelum memulai.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 gap-8">
-                
-                <div class="space-y-4">
-                    <h3 class="text-lg font-bold text-taveve-300 flex items-center gap-2">
-                        <span class="px-2 py-1 bg-taveve-950/70 rounded border border-taveve-800 text-xs">MODULE 01</span> Authentication
+            <div class="space-y-6">
+
+                <div class="space-y-3">
+                    <h3 class="text-base font-bold text-taveve-400 flex items-center gap-2">
+                        <span class="px-2 py-0.5 bg-taveve-950 rounded border border-taveve-800 text-xs">MODULE 01</span> Authentication
                     </h3>
-                    
-                    <div class="glass p-6 rounded-xl border-l-2 border-l-slate-600 hover:border-l-cyan-500 transition-colors">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
+
+                    <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-2">
                             <div>
-                                <h4 class="font-bold text-white text-lg">1. Request OTP (Login)</h4>
+                                <h4 class="font-bold text-white">1. Request OTP (Login)</h4>
                                 <p class="text-slate-400 text-sm mt-1">Langkah pertama. Gunakan endpoint ini untuk memicu pengiriman kode OTP ke Email terdaftar.</p>
                             </div>
-                            <code class="text-xs bg-black px-3 py-2 rounded border border-slate-800 text-taveve-400 font-mono">POST /api/auth/login</code>
+                            <code class="text-xs bg-black px-3 py-1.5 rounded border border-slate-800 text-taveve-400 font-mono whitespace-nowrap">POST /api/auth/login</code>
                         </div>
-                        
-                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+
+                        <div class="grid md:grid-cols-2 gap-5">
                             <div>
                                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
-                                <ul class="text-sm text-slate-300 space-y-2">
-                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">username</span> : Username terdaftar.</li>
-                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">password</span> : Kata sandi akun OrderKuota.</li>
+                                <ul class="text-sm text-slate-300 space-y-1.5">
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">username</span> Username terdaftar.</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">password</span> Kata sandi akun OrderKuota.</li>
                                 </ul>
                             </div>
                             <div>
                                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
-                                <pre class="bg-black/50 p-4 rounded-lg text-xs text-green-400 border border-slate-800 overflow-x-auto">
+                                <pre class="bg-black p-3 rounded text-xs text-green-400 border border-slate-800 overflow-x-auto">
 {
   "status": true,
   "message": "Success",
@@ -305,26 +263,26 @@ module.exports = () => `
                         </div>
                     </div>
 
-                    <div class="glass p-6 rounded-xl border-l-2 border-l-slate-600 hover:border-l-cyan-500 transition-colors">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
+                    <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-2">
                             <div>
-                                <h4 class="font-bold text-white text-lg">2. Verify OTP (Get Token)</h4>
+                                <h4 class="font-bold text-white">2. Verify OTP (Get Token)</h4>
                                 <p class="text-slate-400 text-sm mt-1">Tukar kode OTP yang diterima di Email menjadi <b>Auth Token</b>. Token ini wajib disimpan untuk akses API lainnya.</p>
                             </div>
-                            <code class="text-xs bg-black px-3 py-2 rounded border border-slate-800 text-taveve-400 font-mono">POST /api/auth/verify</code>
+                            <code class="text-xs bg-black px-3 py-1.5 rounded border border-slate-800 text-taveve-400 font-mono whitespace-nowrap">POST /api/auth/verify</code>
                         </div>
-                        
-                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+
+                        <div class="grid md:grid-cols-2 gap-5">
                             <div>
                                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
-                                <ul class="text-sm text-slate-300 space-y-2">
-                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">username</span> : username yang sama.</li>
-                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">otp</span> : Kode 6 digit dari Email.</li>
+                                <ul class="text-sm text-slate-300 space-y-1.5">
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">username</span> username yang sama.</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">otp</span> Kode 6 digit dari Email.</li>
                                 </ul>
                             </div>
                             <div>
                                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
-                                <pre class="bg-black/50 p-4 rounded-lg text-xs text-green-400 border border-slate-800 overflow-x-auto">
+                                <pre class="bg-black p-3 rounded text-xs text-green-400 border border-slate-800 overflow-x-auto">
 {
   "status": true,
   "message": "Success",
@@ -345,31 +303,31 @@ module.exports = () => `
                     </div>
                 </div>
 
-                <div class="space-y-4">
-                    <h3 class="text-lg font-bold text-taveve-200 flex items-center gap-2">
-                        <span class="px-2 py-1 bg-taveve-950/70 rounded border border-taveve-800 text-xs">MODULE 02</span> QRIS Payment
+                <div class="space-y-3">
+                    <h3 class="text-base font-bold text-taveve-400 flex items-center gap-2">
+                        <span class="px-2 py-0.5 bg-taveve-950 rounded border border-taveve-800 text-xs">MODULE 02</span> QRIS Payment
                     </h3>
-                    
-                    <div class="glass p-6 rounded-xl border-l-2 border-l-slate-600 hover:border-l-purple-500 transition-colors">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
+
+                    <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-2">
                             <div>
-                                <h4 class="font-bold text-white text-lg">3. Cek Mutasi QRIS</h4>
+                                <h4 class="font-bold text-white">3. Cek Mutasi QRIS</h4>
                                 <p class="text-slate-400 text-sm mt-1">Mengambil 4 transaksi QRIS terakhir yang masuk (Status: IN). Berguna untuk verifikasi pembayaran otomatis.</p>
                             </div>
-                            <code class="text-xs bg-black px-3 py-2 rounded border border-slate-800 text-taveve-300 font-mono">POST /api/qris/mutasi</code>
+                            <code class="text-xs bg-black px-3 py-1.5 rounded border border-slate-800 text-taveve-400 font-mono whitespace-nowrap">POST /api/qris/mutasi</code>
                         </div>
-                        
-                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+
+                        <div class="grid md:grid-cols-2 gap-5">
                             <div>
                                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
-                                <ul class="text-sm text-slate-300 space-y-2">
-                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">auth_username</span> : Username Login.</li>
-                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">auth_token</span> : Token dari hasil Verify OTP.</li>
+                                <ul class="text-sm text-slate-300 space-y-1.5">
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">auth_username</span> Username Login.</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">auth_token</span> Token dari hasil Verify OTP.</li>
                                 </ul>
                             </div>
                             <div>
-                                <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example (4 transaksi terakhir)</h5>
-                                <pre class="bg-black/50 p-4 rounded-lg text-xs text-green-400 border border-slate-800 overflow-x-auto">
+                                <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
+                                <pre class="bg-black p-3 rounded text-xs text-green-400 border border-slate-800 overflow-x-auto">
 {
   "status": true,
   "data": {
@@ -384,11 +342,8 @@ module.exports = () => `
           "keterangan": "NOBU / JOHN DOE",
           "tanggal": "24/01/2026 18:23",
           "status": "IN",
-          "brand": {
-            "name": "GoPay"
-          }
-        },
-        // ... 3 more transactions
+          "brand": { "name": "GoPay" }
+        }
       ]
     },
     "account": {
@@ -403,20 +358,20 @@ module.exports = () => `
                         </div>
                     </div>
 
-                    <div class="glass p-6 rounded-xl border-l-2 border-l-slate-600 hover:border-l-taveve-400 transition-colors">
-                        <div class="flex justify-between items-center">
+                    <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-2">
                             <div>
-                                <h4 class="font-bold text-white text-lg">4. Decode QRIS dari Foto</h4>
+                                <h4 class="font-bold text-white">4. Decode QRIS dari Foto</h4>
                                 <p class="text-slate-400 text-sm mt-1">Upload foto QRIS untuk mendapatkan raw string-nya. Berguna untuk convert static QRIS fisik ke digital.</p>
                             </div>
-                            <code class="text-xs bg-black px-3 py-2 rounded border border-slate-800 text-taveve-300 font-mono">POST /api/qris/decode</code>
+                            <code class="text-xs bg-black px-3 py-1.5 rounded border border-slate-800 text-taveve-400 font-mono whitespace-nowrap">POST /api/qris/decode</code>
                         </div>
-                        
-                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+
+                        <div class="grid md:grid-cols-2 gap-5">
                             <div>
                                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
-                                <ul class="text-sm text-slate-300 space-y-2">
-                                    <li class="flex flex-col mb-2">
+                                <ul class="text-sm text-slate-300 space-y-1.5">
+                                    <li class="flex flex-col">
                                         <span class="text-taveve-400 font-mono bg-taveve-950/30 w-fit px-1 rounded mb-1">image</span>
                                         <span class="text-xs text-slate-500">File gambar QRIS (JPG/PNG, max 5MB). Gunakan multipart/form-data.</span>
                                     </li>
@@ -424,7 +379,7 @@ module.exports = () => `
                             </div>
                             <div>
                                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
-                                <pre class="bg-black/50 p-4 rounded-lg text-xs text-green-400 border border-slate-800 overflow-x-auto">
+                                <pre class="bg-black p-3 rounded text-xs text-green-400 border border-slate-800 overflow-x-auto">
 {
   "status": true,
   "message": "Success",
@@ -438,29 +393,29 @@ module.exports = () => `
                         </div>
                     </div>
 
-                    <div class="glass p-6 rounded-xl border-l-2 border-l-slate-600 hover:border-l-purple-500 transition-colors">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
+                    <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-2">
                             <div>
-                                <h4 class="font-bold text-white text-lg">5. Generate Dynamic QRIS</h4>
+                                <h4 class="font-bold text-white">5. Generate Dynamic QRIS</h4>
                                 <p class="text-slate-400 text-sm mt-1">Membuat kode QRIS baru dengan nominal yang sudah tertanam (Static to Dynamic). Output berupa base64 image.</p>
                             </div>
-                            <code class="text-xs bg-black px-3 py-2 rounded border border-slate-800 text-taveve-300 font-mono">POST /api/qris/dynamic</code>
+                            <code class="text-xs bg-black px-3 py-1.5 rounded border border-slate-800 text-taveve-400 font-mono whitespace-nowrap">POST /api/qris/dynamic</code>
                         </div>
-                        
-                        <div class="grid md:grid-cols-2 gap-6 mt-6">
+
+                        <div class="grid md:grid-cols-2 gap-5">
                             <div>
                                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
-                                <ul class="text-sm text-slate-300 space-y-2">
+                                <ul class="text-sm text-slate-300 space-y-1.5">
                                     <li class="flex flex-col mb-2">
                                         <span class="text-taveve-400 font-mono bg-taveve-950/30 w-fit px-1 rounded mb-1">base_string</span>
                                         <span class="text-xs text-slate-500">String text dari QRIS Toko Asli Anda (bisa didapat dari scan QRIS toko pakai aplikasi scanner).</span>
                                     </li>
-                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">amount</span> : Nominal Rupiah (Int).</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">amount</span> Nominal Rupiah (Int).</li>
                                 </ul>
                             </div>
                             <div>
                                 <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
-                                <pre class="bg-black/50 p-4 rounded-lg text-xs text-green-400 border border-slate-800 overflow-x-auto">
+                                <pre class="bg-black p-3 rounded text-xs text-green-400 border border-slate-800 overflow-x-auto">
 {
   "status": true,
   "message": "Success",
@@ -481,9 +436,9 @@ module.exports = () => `
         </div>
 
     </main>
-    
-    <footer class="mt-10 mb-6 text-center text-xs text-slate-600 font-mono relative z-10">
-        <p>SECURE CONNECTION ESTABLISHED • ${settings.app.maintainer}</p>
+
+    <footer class="mt-8 mb-4 text-center text-xs text-slate-400 font-mono">
+        <p>Built by <span class="text-taveve-400 font-bold">${settings.app.maintainer}</span> &copy; ${new Date().getFullYear()} ${settings.app.name}. All rights reserved.</p>
     </footer>
 
     <script>
@@ -498,7 +453,7 @@ module.exports = () => `
                 imagePreview: null,
                 selectedFile: null,
                 form: {
-                    username: '', password: '', otp: '', 
+                    username: '', password: '', otp: '',
                     token: '', base_string: '', amount: ''
                 },
                 resetForm() {
@@ -524,7 +479,7 @@ module.exports = () => `
                     this.response = '';
                     this.qrImage = null;
                     this.status = 'TRANSMITTING...';
-                    
+
                     let endpoint = '';
                     let payload = {};
 
@@ -542,35 +497,32 @@ module.exports = () => `
                         payload = { base_string: this.form.base_string, amount: this.form.amount };
                     } else if (this.selectedFeature === 'decode') {
                         endpoint = '/api/qris/decode';
-                        // For file upload, we'll handle it differently
                     }
 
                     try {
                         let res, data;
-                        
+
                         if (this.selectedFeature === 'decode') {
-                            // File upload dengan FormData
                             if (!this.selectedFile) {
                                 throw new Error('Please select an image file');
                             }
                             const formData = new FormData();
                             formData.append('image', this.selectedFile);
-                            
+
                             res = await fetch(endpoint, {
                                 method: 'POST',
                                 body: formData
                             });
                         } else {
-                            // Regular JSON request
                             res = await fetch(endpoint, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify(payload)
                             });
                         }
-                        
+
                         data = await res.json();
-                        
+
                         this.status = res.status === 200 ? 'SUCCESS (200)' : 'ERROR (' + res.status + ')';
                         this.response = JSON.stringify(data, null, 2);
 

@@ -2,13 +2,13 @@
 module.exports = {
   app: {
     name: "Taveve API Gateway",
-    version: "2.0",
+    version: "3.0",
     maintainer: "ByDede",
   },
 
   // Konfigurasi OrderKuota (Bypass Constants Baru)
   orderKuota: {
-    baseUrl: "app.orderkuota.com",
+    baseUrl: process.env.ORDERKUOTA_PROXY_URL || "app.orderkuota.com",
     userAgent: "okhttp/4.12.0", // Sesuai input kamu
 
     // Data Identitas Perangkat Baru
