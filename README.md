@@ -8,6 +8,8 @@ API Gateway untuk integrasi OrderKuota QRIS — mendukung Auth, Mutasi QRIS, Gen
 
 - **Auth** — Login & verifikasi OTP ke akun OrderKuota
 - **Cek Mutasi QRIS** — Ambil 4 transaksi masuk terakhir
+- **Cek Mutasi Detail** — Ambil semua transaksi dengan filter (tanggal, jumlah, keterangan, pagination)
+- **Cek Saldo** — Lihat saldo utama dan saldo QRIS
 - **Generate Dynamic QRIS** — Convert static QRIS jadi dynamic dengan nominal tertanam
 - **Decode QRIS dari Foto** — Upload gambar QRIS, dapatkan raw string-nya
 - **Dashboard UI** — Antarmuka web built-in untuk test semua endpoint
@@ -163,6 +165,47 @@ Content-Type: application/json
 ```
 
 Mengembalikan 4 transaksi masuk (status `IN`) terakhir.
+
+---
+
+### QRIS — Cek Mutasi Detail
+
+```
+POST /api/qris/mutasi-detail
+Content-Type: application/json
+```
+
+```json
+{
+  "auth_username": "your_username",
+  "auth_token": "123456:aBcDeFgH...",
+  "page": 1,
+  "start_date": "2025-01-01",
+  "end_date": "2025-01-31",
+  "keterangan": "GOPAY",
+  "jumlah": "10000"
+}
+```
+
+Mengembalikan semua transaksi (IN & OUT) dengan filter lengkap dan pagination.
+
+---
+
+### QRIS — Cek Saldo
+
+```
+POST /api/qris/balance
+Content-Type: application/json
+```
+
+```json
+{
+  "auth_username": "your_username",
+  "auth_token": "123456:aBcDeFgH..."
+}
+```
+
+Response berisi `balance`, `qris_balance`, `name`, dan `username`.
 
 ---
 

@@ -1,3 +1,14 @@
 /vendor
-/node_modules
+node_modules/
 .env
+.dev.vars
+
+# Backup & arsip
+*.zip
+
+# File sementara
+_test_*
+_key.txt
+
+# Config lokal Claude
+.claude/

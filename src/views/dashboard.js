@@ -103,13 +103,15 @@ module.exports = () => `
                                 <option value="login">Login (Request OTP)</option>
                                 <option value="verify">Verify OTP (Get Token)</option>
                                 <option value="mutasi">Cek Mutasi QRIS</option>
+                                <option value="mutasi-detail">Cek Mutasi Detail</option>
+                                <option value="balance">Cek Saldo</option>
                                 <option value="decode">Decode QRIS dari Foto</option>
                                 <option value="dynamic">Buat Dynamic QRIS</option>
                             </select>
                         </div>
 
                         <div class="space-y-3">
-                            <template x-if="['login', 'verify', 'mutasi'].includes(selectedFeature)">
+                            <template x-if="['login', 'verify', 'mutasi', 'mutasi-detail', 'balance'].includes(selectedFeature)">
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Username / AuthToken</label>
                                     <input type="text" x-model="form.username" placeholder="adminganteng" class="input-field w-full rounded p-2.5 text-sm font-mono">
@@ -130,10 +132,38 @@ module.exports = () => `
                                 </div>
                             </template>
 
-                            <template x-if="selectedFeature === 'mutasi'">
+                            <template x-if="['mutasi', 'mutasi-detail', 'balance'].includes(selectedFeature)">
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Auth Token</label>
                                     <input type="text" x-model="form.token" placeholder="ey..." class="input-field w-full rounded p-2.5 text-xs font-mono">
+                                </div>
+                            </template>
+
+</template>
+                            </template>
+
+                            <template x-if="selectedFeature === 'mutasi-detail'">
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Page</label>
+                                        <input type="number" x-model="form.page" value="1" class="input-field w-full rounded p-2.5 text-sm font-mono">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Dari Tanggal</label>
+                                        <input type="date" x-model="form.start_date" class="input-field w-full rounded p-2.5 text-sm font-mono">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Ke Tanggal</label>
+                                        <input type="date" x-model="form.end_date" class="input-field w-full rounded p-2.5 text-sm font-mono">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Filter Keterangan</label>
+                                        <input type="text" x-model="form.keterangan" placeholder="GOPAY, OVO, DANA..." class="input-field w-full rounded p-2.5 text-sm font-mono">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Filter Jumlah</label>
+                                        <input type="text" x-model="form.jumlah" placeholder="10000" class="input-field w-full rounded p-2.5 text-sm font-mono">
+                                    </div>
                                 </div>
                             </template>
 
@@ -361,7 +391,84 @@ module.exports = () => `
                     <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
                         <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-2">
                             <div>
-                                <h4 class="font-bold text-white">4. Decode QRIS dari Foto</h4>
+                                <h4 class="font-bold text-white">4. Cek Mutasi Detail</h4>
+                                <p class="text-slate-400 text-sm mt-1">Mengambil semua transaksi dengan filter lengkap: tanggal, keterangan, jumlah, dan pagination.</p>
+                            </div>
+                            <code class="text-xs bg-black px-3 py-1.5 rounded border border-slate-800 text-taveve-400 font-mono whitespace-nowrap">POST /api/qris/mutasi-detail</code>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-5">
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
+                                <ul class="text-sm text-slate-300 space-y-1.5">
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">auth_username</span> Username Login.</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">auth_token</span> Token dari hasil Verify OTP.</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">page</span> Halaman (default: 1).</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">start_date</span> Filter dari tanggal (YYYY-MM-DD).</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">end_date</span> Filter sampai tanggal (YYYY-MM-DD).</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">keterangan</span> Filter source (GOPAY, OVO, DANA).</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">jumlah</span> Filter nominal.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
+                                <pre class="bg-black p-3 rounded text-xs text-green-400 border border-slate-800 overflow-x-auto">
+{
+  "status": true,
+  "data": {
+    "success": true,
+    "total": 20,
+    "all_in": [...],
+    "all_out": [...],
+    "results": [...],
+    "pagination": {
+      "current_page": "1",
+      "has_more": true
+    }
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-2">
+                            <div>
+                                <h4 class="font-bold text-white">5. Cek Saldo</h4>
+                                <p class="text-slate-400 text-sm mt-1">Melihat saldo utama dan saldo QRIS dari akun OrderKuota.</p>
+                            </div>
+                            <code class="text-xs bg-black px-3 py-1.5 rounded border border-slate-800 text-taveve-400 font-mono whitespace-nowrap">POST /api/qris/balance</code>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-5">
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
+                                <ul class="text-sm text-slate-300 space-y-1.5">
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">auth_username</span> Username Login.</li>
+                                    <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded">auth_token</span> Token dari hasil Verify OTP.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
+                                <pre class="bg-black p-3 rounded text-xs text-green-400 border border-slate-800 overflow-x-auto">
+{
+  "status": true,
+  "data": {
+    "success": true,
+    "balance": 500000,
+    "qris_balance": 100000,
+    "name": "Nama Toko",
+    "username": "demouser"
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
+                        <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-2">
+                            <div>
+                                <h4 class="font-bold text-white">7. Decode QRIS dari Foto</h4>
                                 <p class="text-slate-400 text-sm mt-1">Upload foto QRIS untuk mendapatkan raw string-nya. Berguna untuk convert static QRIS fisik ke digital.</p>
                             </div>
                             <code class="text-xs bg-black px-3 py-1.5 rounded border border-slate-800 text-taveve-400 font-mono whitespace-nowrap">POST /api/qris/decode</code>
@@ -396,10 +503,10 @@ module.exports = () => `
                     <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
                         <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-2">
                             <div>
-                                <h4 class="font-bold text-white">5. Generate Dynamic QRIS</h4>
+                                <h4 class="font-bold text-white">8. Generate Dynamic QRIS</h4>
                                 <p class="text-slate-400 text-sm mt-1">Membuat kode QRIS baru dengan nominal yang sudah tertanam (Static to Dynamic). Output berupa base64 image.</p>
                             </div>
-                            <code class="text-xs bg-black px-3 py-1.5 rounded border border-slate-800 text-taveve-400 font-mono whitespace-nowrap">POST /api/qris/dynamic</code>
+                            <code class="text-xs bg-black px-3 py-1.5 rounded border border-slate-800 text-taveve-400 font-mono whitespace-nowrap">POST /api/qris/decode</code>
                         </div>
 
                         <div class="grid md:grid-cols-2 gap-5">
@@ -454,7 +561,9 @@ module.exports = () => `
                 selectedFile: null,
                 form: {
                     username: '', password: '', otp: '',
-                    token: '', base_string: '', amount: ''
+                    token: '', base_string: '', amount: '',
+                    page: '1', start_date: '', end_date: '',
+                    keterangan: '', jumlah: ''
                 },
                 resetForm() {
                     this.response = '';
@@ -491,6 +600,20 @@ module.exports = () => `
                         payload = { username: this.form.username, otp: this.form.otp };
                     } else if (this.selectedFeature === 'mutasi') {
                         endpoint = '/api/qris/mutasi';
+                        payload = { auth_username: this.form.username, auth_token: this.form.token };
+                    } else if (this.selectedFeature === 'mutasi-detail') {
+                        endpoint = '/api/qris/mutasi-detail';
+                        payload = {
+                            auth_username: this.form.username,
+                            auth_token: this.form.token,
+                            page: this.form.page || '1',
+                            start_date: this.form.start_date,
+                            end_date: this.form.end_date,
+                            keterangan: this.form.keterangan,
+                            jumlah: this.form.jumlah
+                        };
+                    } else if (this.selectedFeature === 'balance') {
+                        endpoint = '/api/qris/balance';
                         payload = { auth_username: this.form.username, auth_token: this.form.token };
                     } else if (this.selectedFeature === 'dynamic') {
                         endpoint = '/api/qris/dynamic';

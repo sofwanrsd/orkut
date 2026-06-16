@@ -1,0 +1,38 @@
+name = "taveve-gateway"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Dashboard & assets disajikan langsung dari Worker (tidak perlu Vercel)
+
+# ---- Binding Database D1 ----
+# Jalankan: wrangler d1 create taveve-db
+# Lalu salin database_id hasilnya ke bawah ini.
+[[d1_databases]]
+binding = "DB"
+database_name = "taveve-db"
+database_id = "d6ff9e62-50d7-42cc-95e1-bb1d04891257"
+
+# ---- Konfigurasi non-rahasia (identitas perangkat OrderKuota) ----
+[vars]
+OK_HOST = "app.orderkuota.com"
+OK_USER_AGENT = "okhttp/4.12.0"
+OK_APP_REG_ID = "czmk8DcrQzes8FZcI7XpCX:APA91bEOwn07D8Q1u2_m12pv4rMDz3XS522SfkcbdatQaUvcDRPakaTqK3ENMyT52dSDauaSLo3II13P15juQGSmuKOfg58qQ5GFC0ZKnq6Qd1Q4Oq1jorA"
+OK_PHONE_UUID = "czmk8DcrQzes8FZcI7XpCX"
+OK_PHONE_MODEL = "Infinix X678B"
+OK_PHONE_ANDROID_VERSION = "14"
+OK_APP_VERSION_CODE = "260115"
+OK_APP_VERSION_NAME = "26.01.15"
+OK_UI_MODE = "light"
+
+# Lama tagihan aktif sebelum kedaluwarsa (detik). Default 10 menit.
+# Setelah ini, ada grace 2 menit (di db.js) sebelum kode unik dilepas.
+INVOICE_TTL_SECONDS = "600"
+
+# ---- RAHASIA: kunci gateway (server-to-server) ----
+# Worker dipublish, jadi /api/pay/* dijaga API key. Set lewat CLI:
+#   wrangler secret put GATEWAY_API_KEY
+# Lalu server utama mengirim header X-API-Key dengan nilai yang sama.
+#
+# Kredensial merchant (auth_token, username, qris_base) TIDAK disimpan di sini —
+# dikirim server utama tiap request via header X-Auth-Token / X-Auth-Username / X-Qris-Base.

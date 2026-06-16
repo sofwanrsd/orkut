@@ -39,6 +39,8 @@ app.post("/api/auth/verify", apiController.verifyOtp);
 
 // Endpoint QRIS
 app.post("/api/qris/mutasi", apiController.checkMutasi);
+app.post("/api/qris/mutasi-detail", apiController.checkMutasiDetail);
+app.post("/api/qris/balance", apiController.checkBalance);
 app.post("/api/qris/dynamic", apiController.createDynamicQr);
 app.post("/api/qris/decode", upload.single('image'), apiController.decodeQrisImage);
 

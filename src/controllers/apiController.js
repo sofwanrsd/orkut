@@ -79,6 +79,32 @@ exports.checkMutasi = async (req, res) => {
   }
 };
 
+exports.checkMutasiDetail = async (req, res) => {
+  const { auth_token, auth_username, page, start_date, end_date, keterangan, jumlah } = req.body;
+  try {
+    const result = await qrisService.getMutasiDetail(auth_token, auth_username, {
+      page,
+      startDate: start_date,
+      endDate: end_date,
+      keterangan,
+      jumlah,
+    });
+    success(res, result);
+  } catch (err) {
+    error(res, err.message);
+  }
+};
+
+exports.checkBalance = async (req, res) => {
+  const { auth_token, auth_username } = req.body;
+  try {
+    const result = await qrisService.getBalance(auth_token, auth_username);
+    success(res, result);
+  } catch (err) {
+    error(res, err.message);
+  }
+};
+
 exports.createDynamicQr = async (req, res) => {
   const { base_string, amount } = req.body;
   try {
