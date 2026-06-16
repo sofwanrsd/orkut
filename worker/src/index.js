@@ -20,13 +20,15 @@ const ok = (c, data, message = "Success") =>
 const fail = (c, message = "Internal Server Error", code = 500) =>
   c.json({ status: false, message }, code);
 
-// Cek API key gateway (header X-API-Key) untuk endpoint server-to-server.
-// Mengembalikan true bila lolos; kalau tidak, sudah mengirim 401.
-function requireApiKey(c, cfg) {
-  if (!cfg.apiKey) return true; // belum diset → tidak dipaksa (mode dev)
-  if (c.req.header("x-api-key") === cfg.apiKey) return true;
-  return false;
-}
+// Middleware penjaga API key (header X-API-Key) untuk semua endpoint /api/*
+// kecuali /api/health. Kalau GATEWAY_API_KEY belum diset → tidak dipaksa (mode dev).
+const apiKeyGuard = async (c, next) => {
+  const cfg = getConfig(c.env);
+  if (cfg.apiKey && c.req.header("x-api-key") !== cfg.apiKey) {
+    return fail(c, "API key tidak valid", 401);
+  }
+  await next();
+};
 
 // Ambil kredensial merchant dari header (server utama yang mengirim).
 function credFromHeaders(c) {
@@ -57,6 +59,11 @@ async function body(c) {
 
 // ================= UI =================
 app.get("/", (c) => c.html(dashboard()));
+
+// Proteksi API key: semua /api/auth/*, /api/qris/*, /api/pay/* (health & UI terbuka).
+app.use("/api/auth/*", apiKeyGuard);
+app.use("/api/qris/*", apiKeyGuard);
+app.use("/api/pay/*", apiKeyGuard);
 
 // ================= HEALTH =================
 app.get("/api/health", async (c) => {
@@ -202,7 +209,6 @@ app.post("/api/qris/decode", (c) =>
 // Buat tagihan: body { base_amount, id? }. Worker generate unique code + final amount.
 app.post("/api/pay/create", async (c) => {
   const cfg = getConfig(c.env);
-  if (!requireApiKey(c, cfg)) return fail(c, "API key tidak valid", 401);
   const b = await body(c);
   try {
     const inv = await createInvoice(c.env.DB, cfg, credFromHeaders(c), {
@@ -218,7 +224,6 @@ app.post("/api/pay/create", async (c) => {
 // Cek status tagihan (memicu scan saldo). Dipanggil berulang oleh server utama.
 app.get("/api/pay/status/:id", async (c) => {
   const cfg = getConfig(c.env);
-  if (!requireApiKey(c, cfg)) return fail(c, "API key tidak valid", 401);
   try {
     return ok(c, await checkStatus(c.env.DB, cfg, credFromHeaders(c), c.req.param("id")));
   } catch (err) {
@@ -229,7 +234,6 @@ app.get("/api/pay/status/:id", async (c) => {
 // Scan manual (jaring pengaman; dipanggil server utama per merchant). Tidak terikat 1 tagihan.
 app.post("/api/pay/scan", async (c) => {
   const cfg = getConfig(c.env);
-  if (!requireApiKey(c, cfg)) return fail(c, "API key tidak valid", 401);
   try {
     return ok(c, await scanAndMatch(c.env.DB, cfg, credFromHeaders(c)));
   } catch (err) {

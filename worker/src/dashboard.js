@@ -124,6 +124,11 @@ export function dashboard() {
           </select>
         </div>
 
+        <div>
+          <label class="block text-[10px] font-bold text-taveve-400 uppercase mb-1">X-API-Key</label>
+          <input type="text" x-model="cred.apiKey" placeholder="kunci gateway (kosong jika dev)" class="input-field w-full rounded p-2.5 text-xs font-mono">
+        </div>
+
         <div class="space-y-3">
           <!-- Auth fields -->
           <template x-if="['login','verify','mutasi','mutasi-detail','balance'].includes(selected)">
@@ -214,10 +219,6 @@ export function dashboard() {
           <template x-if="selected.startsWith('pay-')">
             <div class="space-y-3 border-t border-slate-800 pt-3 mt-1">
               <p class="text-[10px] font-bold text-taveve-400 uppercase">Header Kredensial (server-to-server)</p>
-              <div>
-                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">X-API-Key</label>
-                <input type="text" x-model="cred.apiKey" placeholder="kunci gateway" class="input-field w-full rounded p-2.5 text-xs font-mono">
-              </div>
               <div>
                 <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">X-Merchant-Id</label>
                 <input type="text" x-model="cred.merchantId" placeholder="tokoberkah" class="input-field w-full rounded p-2.5 text-xs font-mono">
@@ -1190,9 +1191,12 @@ function app() {
 
       try {
         const isGet = this.selected === 'pay-status';
+        const headers = isPay
+          ? this.payHeaders()
+          : { 'Content-Type': 'application/json', 'X-API-Key': this.cred.apiKey };
         const res = await fetch(endpoint, {
           method: isGet ? 'GET' : 'POST',
-          headers: isPay ? this.payHeaders() : { 'Content-Type': 'application/json' },
+          headers,
           body: payload ? JSON.stringify(payload) : undefined
         });
         const data = await res.json();
