@@ -440,20 +440,22 @@ export function dashboard() {
       </div>
       <div class="grid md:grid-cols-2 gap-5">
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Request Body</h5>
-          <pre class="bg-black p-3 rounded text-xs text-slate-300 border border-slate-800">{
-  "auth_username": "USERNAME_ANDA",
-  "auth_token": "TOKEN_ID:auth_token"
-}</pre>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
+          <ul class="text-sm text-slate-300 space-y-1.5">
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-API-Key</span> <span class="text-xs">Header. Kunci gateway.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">auth_username</span> <span class="text-xs">Body. Username OrderKuota.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">auth_token</span> <span class="text-xs">Body. Auth token dari hasil verify OTP.</span></li>
+          </ul>
         </div>
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response</h5>
-          <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800">{
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
+          <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800 overflow-x-auto">{
   "status": true,
+  "message": "Success",
   "data": {
     "success": true,
-    "balance": 76,
-    "qris_balance": 237913,
+    "balance": 198076,
+    "qris_balance": 188,
     "name": "TAVEVE STORE",
     "username": "USERNAME_ANDA"
   }
@@ -475,21 +477,26 @@ export function dashboard() {
       </div>
       <div class="grid md:grid-cols-2 gap-5">
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Request Body</h5>
-          <pre class="bg-black p-3 rounded text-xs text-slate-300 border border-slate-800">{
-  "auth_username": "USERNAME_ANDA",
-  "auth_token": "TOKEN_ID:auth_token",
-  "page": "1"
-}</pre>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
+          <ul class="text-sm text-slate-300 space-y-1.5">
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-API-Key</span> <span class="text-xs">Header. Kunci gateway.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">auth_username</span> <span class="text-xs">Body. Username OrderKuota.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">auth_token</span> <span class="text-xs">Body. Auth token.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">page</span> <span class="text-xs">Body. Halaman (default 1).</span></li>
+          </ul>
+          <p class="text-xs text-yellow-400 mt-3">Catatan: endpoint mutasi OrderKuota memerlukan verifikasi captcha — biasanya gagal otomatis. Pakai <span class="font-mono">/api/pay/*</span> untuk deteksi pembayaran.</p>
         </div>
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response</h5>
-          <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800">{
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
+          <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800 overflow-x-auto">{
   "status": true,
+  "message": "Success",
   "data": {
     "success": true,
     "qris_history": {
       "success": false,
+      "total": 0,
+      "results": [],
       "message": "Kamu belum melakukan verifikasi permintaan"
     },
     "account": {
@@ -497,7 +504,7 @@ export function dashboard() {
       "results": {
         "id": 2440365,
         "username": "USERNAME_ANDA",
-        "qris_balance": 237913,
+        "qris_balance": 188,
         "qris_name": "TAVEVE STORE"
       }
     }
@@ -520,21 +527,23 @@ export function dashboard() {
       </div>
       <div class="grid md:grid-cols-2 gap-5">
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Request Body</h5>
-          <pre class="bg-black p-3 rounded text-xs text-slate-300 border border-slate-800">{
-  "auth_username": "USERNAME_ANDA",
-  "auth_token": "TOKEN_ID:auth_token",
-  "page": "1",
-  "start_date": "2025-01-01",
-  "end_date": "2025-01-31",
-  "keterangan": "GOPAY",
-  "jumlah": "10000"
-}</pre>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
+          <ul class="text-sm text-slate-300 space-y-1.5">
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-API-Key</span> <span class="text-xs">Header. Kunci gateway.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">auth_username</span> <span class="text-xs">Body. Username OrderKuota.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">auth_token</span> <span class="text-xs">Body. Auth token.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">page</span> <span class="text-xs">Body. Halaman (default 1).</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">start_date</span> <span class="text-xs">Body. Filter dari (YYYY-MM-DD).</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">end_date</span> <span class="text-xs">Body. Filter sampai (YYYY-MM-DD).</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">keterangan</span> <span class="text-xs">Body. Filter source (GOPAY/OVO/DANA).</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">jumlah</span> <span class="text-xs">Body. Filter nominal.</span></li>
+          </ul>
         </div>
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response</h5>
-          <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800">{
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
+          <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800 overflow-x-auto">{
   "status": true,
+  "message": "Success",
   "data": {
     "success": true,
     "total": 2,
@@ -582,20 +591,23 @@ export function dashboard() {
       </div>
       <div class="grid md:grid-cols-2 gap-5">
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Request Body</h5>
-          <pre class="bg-black p-3 rounded text-xs text-slate-300 border border-slate-800">{
-  "base_string": "00020101021126...",
-  "amount": 50000
-}</pre>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
+          <ul class="text-sm text-slate-300 space-y-1.5">
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-API-Key</span> <span class="text-xs">Header. Kunci gateway.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">base_string</span> <span class="text-xs">Body. String QRIS statis (dimulai 000201...).</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">amount</span> <span class="text-xs">Body. Nominal (Int) dalam Rupiah.</span></li>
+          </ul>
+          <p class="text-xs text-slate-500 mt-3">Worker mengembalikan <span class="font-mono">dynamic_string</span>; render ke gambar QR di sisi klien (mis. <span class="font-mono">qrcodejs</span>).</p>
         </div>
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response</h5>
-          <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800">{
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
+          <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800 overflow-x-auto">{
   "status": true,
+  "message": "Success",
   "data": {
-    "original_string": "00020101021126...",
-    "amount": 50000,
-    "dynamic_string": "00020101021226..."
+    "original_string": "00020101021126670016COM.NOBUBANK.WWW...",
+    "amount": 15000,
+    "dynamic_string": "00020101021226670016COM.NOBUBANK.WWW..."
   }
 }</pre>
         </div>
@@ -623,38 +635,38 @@ export function dashboard() {
       </div>
       <div class="grid md:grid-cols-2 gap-5">
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Headers (wajib)</h5>
-          <pre class="bg-black p-3 rounded text-xs text-slate-300 border border-slate-800">X-API-Key:       kunci-gateway-rahasia
-X-Merchant-Id:   tokoberkah
-X-Auth-Token:    2440365:BQivm...
-X-Auth-Username: sofwanrsd
-X-Qris-Base:     00020101...   (statis merchant)</pre>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-3">Request Body</h5>
-          <pre class="bg-black p-3 rounded text-xs text-slate-300 border border-slate-800">{
-  "base_amount": 10000,   // harga asli (Rp) — Worker generate unik code
-  "id": "INV-001"         // opsional, kosong = auto UUID
-}</pre>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-3">Catatan</h5>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
+          <ul class="text-sm text-slate-300 space-y-1.5">
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-API-Key</span> <span class="text-xs">Header. Kunci gateway (server-to-server).</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-Merchant-Id</span> <span class="text-xs">Header. ID unik merchant dari DB Anda.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-Auth-Token</span> <span class="text-xs">Header. auth_token OrderKuota merchant.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-Auth-Username</span> <span class="text-xs">Header. Username OrderKuota merchant.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-Qris-Base</span> <span class="text-xs">Header. String QRIS statis merchant.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">base_amount</span> <span class="text-xs">Body. Harga asli (Rp). Worker tambahkan kode unik 1–500.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">id</span> <span class="text-xs">Body. Opsional. ID invoice dari server Anda; kosong = auto UUID.</span></li>
+          </ul>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-4">Catatan</h5>
           <ul class="text-xs text-slate-400 space-y-1">
-            <li>• Nominal akhir = base_amount + kode unik (1–500)</li>
-            <li>• Tagihan aktif 10 menit, lalu EXPIRED</li>
-            <li>• Kode unik tetap terkunci +2 menit grace setelah expired</li>
-            <li>• Slot unik per nominal dasar: 500 buah</li>
+            <li>• <b class="text-white">amount</b> di response = nominal yang harus dibayar pelanggan.</li>
+            <li>• Tagihan aktif 10 menit + grace 2 menit (kode unik tetap terkunci).</li>
+            <li>• Slot kode unik per nominal dasar: 500.</li>
           </ul>
         </div>
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response</h5>
-          <pre class="bg-black p-3 rounded text-xs text-taveve-400 border border-slate-800">{
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
+          <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800 overflow-x-auto">{
   "status": true,
+  "message": "Success",
   "data": {
-    "id": "debbe541-e6a3-41c8-9413-d896659c2b70",
+    "id": "INV-001",
+    "merchant_id": "tokoberkah",
     "base_amount": 10000,
-    "unique_code": 97,
-    "amount": 10097,     // ← YANG HARUS DIBAYAR
-    "qris_string": "00020101021226670016COM.NOBUBANK.WWW011893...54",
+    "unique_code": 164,
+    "amount": 10164,
+    "qris_string": "00020101021226670016COM.NOBUBANK.WWW...",
     "status": "PENDING",
-    "created_at": 1781594852781,
-    "expires_at": 1781595152781
+    "created_at": 1781617098947,
+    "expires_at": 1781617698947
   }
 }</pre>
         </div>
@@ -674,36 +686,39 @@ X-Qris-Base:     00020101...   (statis merchant)</pre>
       </div>
       <div class="grid md:grid-cols-2 gap-5">
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Headers (wajib)</h5>
-          <pre class="bg-black p-3 rounded text-xs text-slate-300 border border-slate-800">X-API-Key:       kunci-gateway-rahasia
-X-Merchant-Id:   tokoberkah
-X-Auth-Token:    2440365:BQivm...
-X-Auth-Username: sofwanrsd</pre>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-3">URL Parameter</h5>
-          <pre class="bg-black p-3 rounded text-xs text-slate-300 border border-slate-800">GET /api/pay/status/INV-001</pre>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-3">Status Values</h5>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
+          <ul class="text-sm text-slate-300 space-y-1.5">
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-API-Key</span> <span class="text-xs">Header. Kunci gateway.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-Merchant-Id</span> <span class="text-xs">Header. ID merchant.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-Auth-Token</span> <span class="text-xs">Header. auth_token OrderKuota.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-Auth-Username</span> <span class="text-xs">Header. Username OrderKuota.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">id</span> <span class="text-xs">URL param. ID invoice yang dicek.</span></li>
+          </ul>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-4">Status Values</h5>
           <ul class="text-xs space-y-1">
-            <li><span class="status-badge status-pending">PENDING</span> — belum dibayar</li>
-            <li><span class="status-badge status-paid">PAID</span> — lunas ✅</li>
-            <li><span class="status-badge status-expired">EXPIRED</span> — kedaluwarsa</li>
+            <li><span class="status-badge status-pending">PENDING</span> belum dibayar / dalam grace</li>
+            <li><span class="status-badge status-paid">PAID</span> lunas — proses order</li>
+            <li><span class="status-badge status-expired">EXPIRED</span> lewat 10 mnt + grace 2 mnt</li>
           </ul>
         </div>
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response</h5>
-          <pre class="bg-black p-3 rounded text-xs text-taveve-400 border border-slate-800">{
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
+          <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800 overflow-x-auto">{
   "status": true,
+  "message": "Success",
   "data": {
-    "id": "debbe541-e6a3-41c8-9413-d896659c2b70",
-    "amount": 10097,
+    "id": "INV-001",
+    "merchant_id": "tokoberkah",
+    "amount": 10164,
     "base_amount": 10000,
-    "status": "PAID",     // PENDING | PAID | EXPIRED
+    "status": "PAID",
     "paid": true,
-    "paid_at": 1781595000000,
-    "expires_at": 1781595152781,
+    "paid_at": 1781617300000,
+    "expires_at": 1781617698947,
     "scan": {
       "current": 237913,
-      "delta": 10097,
-      "matched": ["debbe541-e6a3-41c8-9413-d896659c2b70"],
+      "delta": 10164,
+      "matched": ["INV-001"],
       "note": "matched"
     }
   }
@@ -725,23 +740,24 @@ X-Auth-Username: sofwanrsd</pre>
       </div>
       <div class="grid md:grid-cols-2 gap-5">
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Headers</h5>
-          <pre class="bg-black p-3 rounded text-xs text-slate-300 border border-slate-800">X-API-Key: kunci-gateway
-X-Merchant-Id: tokoberkah
-X-Auth-Token: 2440365:BQivm...
-X-Auth-Username: USERNAME_MERCHANT
-
-// Tidak perlu body
-POST /api/pay/scan</pre>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
+          <ul class="text-sm text-slate-300 space-y-1.5">
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-API-Key</span> <span class="text-xs">Header. Kunci gateway.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-Merchant-Id</span> <span class="text-xs">Header. ID merchant.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-Auth-Token</span> <span class="text-xs">Header. auth_token OrderKuota.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-Auth-Username</span> <span class="text-xs">Header. Username OrderKuota.</span></li>
+          </ul>
+          <p class="text-xs text-slate-500 mt-3">Body kosong. Endpoint ini scan saldo merchant ini sekali → cocokkan delta vs PENDING → geser baseline.</p>
         </div>
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response</h5>
-          <pre class="bg-black p-3 rounded text-xs text-taveve-400 border border-slate-800">{
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
+          <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800 overflow-x-auto">{
   "status": true,
+  "message": "Success",
   "data": {
     "current": 237913,
-    "delta": 10097,
-    "matched": ["debbe541-e6a3-41c8-9413-d896659c2b70"],
+    "delta": 10164,
+    "matched": ["INV-001"],
     "note": "matched"
   }
 }</pre>
@@ -903,16 +919,18 @@ POST /api/pay/scan</pre>
       </div>
       <div class="grid md:grid-cols-2 gap-5">
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Request Body</h5>
-          <pre class="bg-black p-3 rounded text-xs text-slate-300 border border-slate-800 overflow-x-auto">{
-  "username": "USERNAME_ANDA",
-  "password": "password_orderkuota"
-}</pre>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
+          <ul class="text-sm text-slate-300 space-y-1.5">
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-API-Key</span> <span class="text-xs">Header. Kunci gateway.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">username</span> <span class="text-xs">Body. Username akun OrderKuota merchant.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">password</span> <span class="text-xs">Body. Password akun OrderKuota.</span></li>
+          </ul>
         </div>
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response</h5>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
           <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800 overflow-x-auto">{
   "status": true,
+  "message": "Success",
   "data": {
     "success": true,
     "results": {
@@ -939,16 +957,18 @@ POST /api/pay/scan</pre>
       </div>
       <div class="grid md:grid-cols-2 gap-5">
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Request Body</h5>
-          <pre class="bg-black p-3 rounded text-xs text-slate-300 border border-slate-800 overflow-x-auto">{
-  "username": "USERNAME_ANDA",
-  "otp": "123456"
-}</pre>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Parameters</h5>
+          <ul class="text-sm text-slate-300 space-y-1.5">
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">X-API-Key</span> <span class="text-xs">Header. Kunci gateway.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">username</span> <span class="text-xs">Body. Username yang sama dengan login.</span></li>
+            <li class="flex gap-2"><span class="text-taveve-400 font-mono bg-taveve-950/30 px-1 rounded text-xs">otp</span> <span class="text-xs">Body. Kode 6 digit dari email.</span></li>
+          </ul>
         </div>
         <div>
-          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response</h5>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response Example</h5>
           <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800 overflow-x-auto">{
   "status": true,
+  "message": "Success",
   "data": {
     "success": true,
     "results": {
