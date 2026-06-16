@@ -537,14 +537,32 @@ export function dashboard() {
   "status": true,
   "data": {
     "success": true,
-    "total": 20,
-    "all_in": [...],
-    "all_out": [...],
-    "results": [...],
-    "pagination": {
-      "current_page": "1",
-      "has_more": true
-    }
+    "total": 2,
+    "all_in": [
+      {
+        "id": 123456789,
+        "kredit": "10.000",
+        "debet": "0",
+        "saldo_akhir": "100.000",
+        "keterangan": "NOBU / JOHN DOE",
+        "tanggal": "24/01/2026 18:23",
+        "status": "IN",
+        "brand": { "name": "GoPay" }
+      }
+    ],
+    "all_out": [
+      {
+        "id": 123456790,
+        "kredit": "0",
+        "debet": "5.000",
+        "saldo_akhir": "95.000",
+        "keterangan": "Penarikan",
+        "tanggal": "24/01/2026 19:01",
+        "status": "OUT",
+        "brand": { "name": "" }
+      }
+    ],
+    "results": [ /* gabungan all_in + all_out */ ]
   }
 }</pre>
         </div>
