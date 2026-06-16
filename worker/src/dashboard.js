@@ -311,67 +311,6 @@ export function dashboard() {
     </div>
   </div>
 
-  <!-- Ringkasan Endpoint -->
-  <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
-    <h4 class="font-bold text-white mb-3">Ringkasan Endpoint</h4>
-    <div class="overflow-x-auto">
-      <table class="w-full text-xs">
-        <thead>
-          <tr class="text-left text-slate-500 uppercase tracking-wider border-b border-slate-800">
-            <th class="py-2 pr-3 font-bold">Method</th>
-            <th class="py-2 pr-3 font-bold">Endpoint</th>
-            <th class="py-2 pr-3 font-bold">API Key</th>
-            <th class="py-2 font-bold">Fungsi</th>
-          </tr>
-        </thead>
-        <tbody class="font-mono text-slate-300 align-top">
-          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-get">GET</span></td><td class="py-2 pr-3 text-taveve-400">/api/health</td><td class="py-2 pr-3 text-slate-500">—</td><td class="py-2 font-sans text-slate-400">Cek koneksi gateway ↔ OrderKuota</td></tr>
-          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-post">POST</span></td><td class="py-2 pr-3 text-taveve-400">/api/pay/create</td><td class="py-2 pr-3 text-emerald-400">wajib</td><td class="py-2 font-sans text-slate-400">Buat tagihan + nominal unik + QRIS</td></tr>
-          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-get">GET</span></td><td class="py-2 pr-3 text-taveve-400">/api/pay/status/:id</td><td class="py-2 pr-3 text-emerald-400">wajib</td><td class="py-2 font-sans text-slate-400">Cek status tagihan (auto-scan saldo)</td></tr>
-          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-post">POST</span></td><td class="py-2 pr-3 text-taveve-400">/api/pay/scan</td><td class="py-2 pr-3 text-emerald-400">wajib</td><td class="py-2 font-sans text-slate-400">Scan saldo manual (cron/jaring pengaman)</td></tr>
-          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-post">POST</span></td><td class="py-2 pr-3 text-taveve-400">/api/qris/balance</td><td class="py-2 pr-3 text-slate-500">—</td><td class="py-2 font-sans text-slate-400">Cek saldo akun OrderKuota</td></tr>
-          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-post">POST</span></td><td class="py-2 pr-3 text-taveve-400">/api/qris/dynamic</td><td class="py-2 pr-3 text-slate-500">—</td><td class="py-2 font-sans text-slate-400">Generate QRIS dinamis dari string statis</td></tr>
-          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-post">POST</span></td><td class="py-2 pr-3 text-taveve-400">/api/qris/mutasi</td><td class="py-2 pr-3 text-slate-500">—</td><td class="py-2 font-sans text-slate-400">Cek mutasi <span class="text-yellow-400">(kena captcha)</span></td></tr>
-          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-post">POST</span></td><td class="py-2 pr-3 text-taveve-400">/api/auth/login</td><td class="py-2 pr-3 text-slate-500">—</td><td class="py-2 font-sans text-slate-400">Request OTP (opsional, dapat token)</td></tr>
-          <tr><td class="py-2 pr-3"><span class="method-badge method-post">POST</span></td><td class="py-2 pr-3 text-taveve-400">/api/auth/verify</td><td class="py-2 pr-3 text-slate-500">—</td><td class="py-2 font-sans text-slate-400">Verify OTP → auth_token</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Format Response & Status -->
-  <div class="grid md:grid-cols-2 gap-4">
-    <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
-      <h4 class="font-bold text-white mb-2">Format Response</h4>
-      <p class="text-slate-400 text-sm mb-3">Semua endpoint mengembalikan envelope JSON yang konsisten.</p>
-      <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Sukses</h5>
-      <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800 overflow-x-auto">{
-  "status": true,
-  "message": "Success",
-  "data": { ... }
-}</pre>
-      <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-3">Gagal</h5>
-      <pre class="bg-black p-3 rounded text-xs text-red-400 border border-slate-800 overflow-x-auto">{
-  "status": false,
-  "message": "Pesan error"
-}</pre>
-      <p class="text-slate-500 text-xs mt-3">Selalu cek field <span class="font-mono text-taveve-400">status</span> (boolean) sebelum membaca <span class="font-mono text-taveve-400">data</span>.</p>
-    </div>
-    <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
-      <h4 class="font-bold text-white mb-2">Kode Status HTTP</h4>
-      <table class="w-full text-xs">
-        <tbody class="align-top">
-          <tr class="border-b border-slate-900"><td class="py-2 pr-3 font-mono text-emerald-400 font-bold">200</td><td class="py-2 font-sans text-slate-400">OK — request berhasil (cek field <span class="font-mono">status</span>)</td></tr>
-          <tr class="border-b border-slate-900"><td class="py-2 pr-3 font-mono text-yellow-400 font-bold">400</td><td class="py-2 font-sans text-slate-400">Input tidak valid (base_amount salah, qris_base kosong, slot unik habis)</td></tr>
-          <tr class="border-b border-slate-900"><td class="py-2 pr-3 font-mono text-red-400 font-bold">401</td><td class="py-2 font-sans text-slate-400">X-API-Key salah / tidak ada</td></tr>
-          <tr class="border-b border-slate-900"><td class="py-2 pr-3 font-mono text-red-400 font-bold">404</td><td class="py-2 font-sans text-slate-400">Tagihan tidak ditemukan / endpoint salah</td></tr>
-          <tr class="border-b border-slate-900"><td class="py-2 pr-3 font-mono text-red-400 font-bold">500</td><td class="py-2 font-sans text-slate-400">Error internal / OrderKuota tidak bisa dihubungi</td></tr>
-          <tr><td class="py-2 pr-3 font-mono text-slate-400 font-bold">501</td><td class="py-2 font-sans text-slate-400">Belum didukung (decode QRIS dari foto)</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
   <!-- MODULE 01: Credential -->
   <div class="space-y-3">
     <h3 class="text-base font-bold text-taveve-400 flex items-center gap-2">
