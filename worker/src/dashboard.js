@@ -347,7 +347,6 @@ export function dashboard() {
         </div>
       </div>
     </div>
-  </div>
 
     <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
       <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-2">
