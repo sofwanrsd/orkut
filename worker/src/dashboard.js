@@ -305,8 +305,69 @@ export function dashboard() {
     <div class="mt-3 flex flex-wrap gap-2">
       <span class="badge">Multi-tenant (banyak merchant)</span>
       <span class="badge">Bebas Captcha (polling saldo)</span>
-      <span class="badge">Worker stateless (stateless)</span>
+      <span class="badge">Worker stateless</span>
       <span class="badge">Cloudflare Worker + D1</span>
+    </div>
+  </div>
+
+  <!-- Ringkasan Endpoint -->
+  <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
+    <h4 class="font-bold text-white mb-3">Ringkasan Endpoint</h4>
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs">
+        <thead>
+          <tr class="text-left text-slate-500 uppercase tracking-wider border-b border-slate-800">
+            <th class="py-2 pr-3 font-bold">Method</th>
+            <th class="py-2 pr-3 font-bold">Endpoint</th>
+            <th class="py-2 pr-3 font-bold">API Key</th>
+            <th class="py-2 font-bold">Fungsi</th>
+          </tr>
+        </thead>
+        <tbody class="font-mono text-slate-300 align-top">
+          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-get">GET</span></td><td class="py-2 pr-3 text-taveve-400">/api/health</td><td class="py-2 pr-3 text-slate-500">—</td><td class="py-2 font-sans text-slate-400">Cek koneksi gateway ↔ OrderKuota</td></tr>
+          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-post">POST</span></td><td class="py-2 pr-3 text-taveve-400">/api/pay/create</td><td class="py-2 pr-3 text-emerald-400">wajib</td><td class="py-2 font-sans text-slate-400">Buat tagihan + nominal unik + QRIS</td></tr>
+          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-get">GET</span></td><td class="py-2 pr-3 text-taveve-400">/api/pay/status/:id</td><td class="py-2 pr-3 text-emerald-400">wajib</td><td class="py-2 font-sans text-slate-400">Cek status tagihan (auto-scan saldo)</td></tr>
+          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-post">POST</span></td><td class="py-2 pr-3 text-taveve-400">/api/pay/scan</td><td class="py-2 pr-3 text-emerald-400">wajib</td><td class="py-2 font-sans text-slate-400">Scan saldo manual (cron/jaring pengaman)</td></tr>
+          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-post">POST</span></td><td class="py-2 pr-3 text-taveve-400">/api/qris/balance</td><td class="py-2 pr-3 text-slate-500">—</td><td class="py-2 font-sans text-slate-400">Cek saldo akun OrderKuota</td></tr>
+          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-post">POST</span></td><td class="py-2 pr-3 text-taveve-400">/api/qris/dynamic</td><td class="py-2 pr-3 text-slate-500">—</td><td class="py-2 font-sans text-slate-400">Generate QRIS dinamis dari string statis</td></tr>
+          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-post">POST</span></td><td class="py-2 pr-3 text-taveve-400">/api/qris/mutasi</td><td class="py-2 pr-3 text-slate-500">—</td><td class="py-2 font-sans text-slate-400">Cek mutasi <span class="text-yellow-400">(kena captcha)</span></td></tr>
+          <tr class="border-b border-slate-900"><td class="py-2 pr-3"><span class="method-badge method-post">POST</span></td><td class="py-2 pr-3 text-taveve-400">/api/auth/login</td><td class="py-2 pr-3 text-slate-500">—</td><td class="py-2 font-sans text-slate-400">Request OTP (opsional, dapat token)</td></tr>
+          <tr><td class="py-2 pr-3"><span class="method-badge method-post">POST</span></td><td class="py-2 pr-3 text-taveve-400">/api/auth/verify</td><td class="py-2 pr-3 text-slate-500">—</td><td class="py-2 font-sans text-slate-400">Verify OTP → auth_token</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Format Response & Status -->
+  <div class="grid md:grid-cols-2 gap-4">
+    <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
+      <h4 class="font-bold text-white mb-2">Format Response</h4>
+      <p class="text-slate-400 text-sm mb-3">Semua endpoint mengembalikan envelope JSON yang konsisten.</p>
+      <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Sukses</h5>
+      <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800 overflow-x-auto">{
+  "status": true,
+  "message": "Success",
+  "data": { ... }
+}</pre>
+      <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 mt-3">Gagal</h5>
+      <pre class="bg-black p-3 rounded text-xs text-red-400 border border-slate-800 overflow-x-auto">{
+  "status": false,
+  "message": "Pesan error"
+}</pre>
+      <p class="text-slate-500 text-xs mt-3">Selalu cek field <span class="font-mono text-taveve-400">status</span> (boolean) sebelum membaca <span class="font-mono text-taveve-400">data</span>.</p>
+    </div>
+    <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
+      <h4 class="font-bold text-white mb-2">Kode Status HTTP</h4>
+      <table class="w-full text-xs">
+        <tbody class="align-top">
+          <tr class="border-b border-slate-900"><td class="py-2 pr-3 font-mono text-emerald-400 font-bold">200</td><td class="py-2 font-sans text-slate-400">OK — request berhasil (cek field <span class="font-mono">status</span>)</td></tr>
+          <tr class="border-b border-slate-900"><td class="py-2 pr-3 font-mono text-yellow-400 font-bold">400</td><td class="py-2 font-sans text-slate-400">Input tidak valid (base_amount salah, qris_base kosong, slot unik habis)</td></tr>
+          <tr class="border-b border-slate-900"><td class="py-2 pr-3 font-mono text-red-400 font-bold">401</td><td class="py-2 font-sans text-slate-400">X-API-Key salah / tidak ada</td></tr>
+          <tr class="border-b border-slate-900"><td class="py-2 pr-3 font-mono text-red-400 font-bold">404</td><td class="py-2 font-sans text-slate-400">Tagihan tidak ditemukan / endpoint salah</td></tr>
+          <tr class="border-b border-slate-900"><td class="py-2 pr-3 font-mono text-red-400 font-bold">500</td><td class="py-2 font-sans text-slate-400">Error internal / OrderKuota tidak bisa dihubungi</td></tr>
+          <tr><td class="py-2 pr-3 font-mono text-slate-400 font-bold">501</td><td class="py-2 font-sans text-slate-400">Belum didukung (decode QRIS dari foto)</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -767,6 +828,121 @@ POST /api/pay/scan</pre>
       <p class="text-slate-500 text-xs mt-4">Yang menentukan order lunas adalah <b class="text-white">status = PAID</b> (atau id invoice muncul di <span class="font-mono">scan.matched</span>). Nilai <span class="font-mono">note</span> hanya untuk audit/log.</p>
     </div>
 
+  </div>
+
+  <!-- MODULE 04: SYSTEM & AUTH -->
+  <div class="space-y-3">
+    <h3 class="text-base font-bold text-taveve-400 flex items-center gap-2">
+      <span class="px-2 py-0.5 bg-taveve-950 rounded border border-taveve-800 text-xs">MODULE 04</span>
+      System &amp; Auth <span class="text-xs text-slate-500 font-normal normal-case">(opsional — testing/diagnostik)</span>
+    </h3>
+
+    <!-- Health -->
+    <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
+      <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-2">
+        <div>
+          <h4 class="font-bold text-white">Health Check</h4>
+          <p class="text-slate-400 text-sm mt-1">Cek apakah gateway hidup dan bisa menjangkau OrderKuota. Berguna untuk monitoring/uptime. Tidak butuh API key.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="method-badge method-get">GET</span>
+          <code class="text-xs bg-black px-3 py-1.5 rounded border border-slate-800 text-taveve-400 font-mono">/api/health</code>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-5">
+        <div>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nilai api_status</h5>
+          <ul class="text-xs text-slate-300 space-y-1">
+            <li><span class="text-emerald-400 font-mono">online</span> gateway ↔ OrderKuota normal</li>
+            <li><span class="text-yellow-400 font-mono">blocked</span> IP gateway belum di-whitelist OrderKuota</li>
+            <li><span class="text-red-400 font-mono">offline</span> OrderKuota tidak bisa dihubungi</li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response</h5>
+          <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800 overflow-x-auto">{
+  "status": true,
+  "message": "API Gateway healthy & OrderKuota reachable",
+  "api_status": "online",
+  "orderkuota_connection": "connected"
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Login -->
+    <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
+      <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-2">
+        <div>
+          <h4 class="font-bold text-white">Login — Request OTP</h4>
+          <p class="text-slate-400 text-sm mt-1">Memicu OrderKuota mengirim kode OTP ke email merchant. <b class="text-white">Hanya perlu sekali</b> untuk mendapatkan <span class="font-mono">auth_token</span> — setelah punya token, alur Payment tidak butuh login lagi.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="method-badge method-post">POST</span>
+          <code class="text-xs bg-black px-3 py-1.5 rounded border border-slate-800 text-taveve-400 font-mono">/api/auth/login</code>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-5">
+        <div>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Request Body</h5>
+          <pre class="bg-black p-3 rounded text-xs text-slate-300 border border-slate-800 overflow-x-auto">{
+  "username": "USERNAME_ANDA",
+  "password": "password_orderkuota"
+}</pre>
+        </div>
+        <div>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response</h5>
+          <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800 overflow-x-auto">{
+  "status": true,
+  "data": {
+    "success": true,
+    "results": {
+      "otp": "email",
+      "otp_value": "sof***02@gmail.com"
+    }
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Verify -->
+    <div class="card p-5 rounded-xl border-l-2 border-l-slate-700">
+      <div class="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-2">
+        <div>
+          <h4 class="font-bold text-white">Verify OTP — Get Token</h4>
+          <p class="text-slate-400 text-sm mt-1">Tukar kode OTP yang masuk ke email jadi <b class="text-white">auth_token</b>. Simpan token + username ini di DB server Anda — itulah yang dipakai untuk semua request Payment merchant.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="method-badge method-post">POST</span>
+          <code class="text-xs bg-black px-3 py-1.5 rounded border border-slate-800 text-taveve-400 font-mono">/api/auth/verify</code>
+        </div>
+      </div>
+      <div class="grid md:grid-cols-2 gap-5">
+        <div>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Request Body</h5>
+          <pre class="bg-black p-3 rounded text-xs text-slate-300 border border-slate-800 overflow-x-auto">{
+  "username": "USERNAME_ANDA",
+  "otp": "123456"
+}</pre>
+        </div>
+        <div>
+          <h5 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Response</h5>
+          <pre class="bg-black p-3 rounded text-xs text-emerald-400 border border-slate-800 overflow-x-auto">{
+  "status": true,
+  "data": {
+    "success": true,
+    "results": {
+      "id": "USER_ID",
+      "name": "NAMA_TOKO",
+      "username": "USERNAME_ANDA",
+      "token": "USER_ID:auth_token"
+    }
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 </template>
