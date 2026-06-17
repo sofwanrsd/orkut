@@ -795,6 +795,7 @@ export function dashboard() {
             <li><span class="text-taveve-400 font-mono">unmatched_in</span> uang masuk tak cocok tagihan manapun</li>
             <li><span class="text-taveve-400 font-mono">balance_down</span> saldo turun (WD/refund) — diserap baseline</li>
             <li><span class="text-taveve-400 font-mono">init_baseline</span> scan pertama merchant (set titik awal)</li>
+            <li><span class="text-taveve-400 font-mono">scan_locked</span> scan paralel ditolak (ada scan lain berjalan) — coba lagi</li>
           </ul>
         </div>
       </div>
