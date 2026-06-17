@@ -26,7 +26,8 @@ async function postOK(cfg, path, data) {
   try {
     json = JSON.parse(text);
   } catch {
-    throw new Error(text || `OrderKuota HTTP ${res.status}`);
+    // Jangan bocorkan body mentah OrderKuota (bisa HTML/pesan internal) ke klien.
+    throw new Error(`OrderKuota tidak mengembalikan response valid (HTTP ${res.status})`);
   }
   return json;
 }

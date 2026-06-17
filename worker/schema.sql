@@ -1,13 +1,11 @@
 -- Skema D1 untuk TAVEVE Gateway (MULTI-TENANT)
 -- Jalankan: npm run db:init   (atau db:init:local untuk dev)
--- CATATAN: skrip ini DROP tabel lama — aman dijalankan ulang saat masih tahap test.
-
-DROP TABLE IF EXISTS invoices;
-DROP TABLE IF EXISTS app_state;
-DROP TABLE IF EXISTS balance_log;
+-- IDEMPOTEN & AMAN PRODUKSI: tidak men-DROP tabel, jadi data invoice tidak hilang
+-- saat skrip dijalankan ulang. Untuk wipe penuh (mis. saat test), DROP manual dulu:
+--   wrangler d1 execute taveve-db --remote --command "DROP TABLE invoices; DROP TABLE app_state; DROP TABLE balance_log;"
 
 -- Tabel tagihan / order (per merchant)
-CREATE TABLE invoices (
+CREATE TABLE IF NOT EXISTS invoices (
   merchant_id  TEXT    NOT NULL,             -- ID merchant (dari server utama)
   id           TEXT    NOT NULL,             -- ID tagihan (ref dari server utama / auto)
   base_amount  INTEGER NOT NULL,             -- harga asli (mis. 10000)

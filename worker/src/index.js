@@ -9,6 +9,7 @@ import { getConfig } from "./config.js";
 import { loginRequest, getBalance, getMutasi } from "./orderkuota.js";
 import { generateDynamicQR } from "./qrisLogic.js";
 import { createInvoice, checkStatus, scanAndMatch } from "./detection.js";
+import { getState, setState } from "./db.js";
 import { dashboard } from "./dashboard.js";
 
 const app = new Hono();
@@ -66,32 +67,52 @@ app.use("/api/qris/*", apiKeyGuard);
 app.use("/api/pay/*", apiKeyGuard);
 
 // ================= HEALTH =================
+// Hasil di-cache ~30 detik di D1 supaya tidak hammer login OrderKuota tiap request
+// (endpoint ini publik tanpa API key → cegah amplifikasi DoS ke OrderKuota).
+const HEALTH_TTL_MS = 30 * 1000;
 app.get("/api/health", async (c) => {
   const cfg = getConfig(c.env);
+  const now = Date.now();
+  try {
+    const cached = await getState(c.env.DB, "health_cache");
+    if (cached) {
+      const obj = JSON.parse(cached);
+      if (obj && typeof obj.at === "number" && now - obj.at < HEALTH_TTL_MS) {
+        return c.json({ ...obj.body, cached: true });
+      }
+    }
+  } catch { /* cache miss → cek live */ }
+
+  let body;
   try {
     const test = await loginRequest(cfg, "test", "test");
     const str = JSON.stringify(test);
     if (str.includes("Gunakan Jaringan Internet Lainnya")) {
-      return c.json({
+      body = {
         status: false,
         message: "OrderKuota API blocked - IP not whitelisted",
         api_status: "blocked",
-      });
+      };
+    } else {
+      body = {
+        status: true,
+        message: "API Gateway healthy & OrderKuota reachable",
+        api_status: "online",
+        orderkuota_connection: "connected",
+      };
     }
-    return c.json({
-      status: true,
-      message: "API Gateway healthy & OrderKuota reachable",
-      api_status: "online",
-      orderkuota_connection: "connected",
-    });
   } catch (err) {
-    return c.json({
+    body = {
       status: false,
       message: "Cannot reach OrderKuota API",
       api_status: "offline",
-      error: err.message,
-    });
+    };
   }
+
+  try {
+    await setState(c.env.DB, "health_cache", JSON.stringify({ at: now, body }));
+  } catch { /* abaikan kegagalan tulis cache */ }
+  return c.json(body);
 });
 
 // ================= AUTH (endpoint lama, stabil) =================

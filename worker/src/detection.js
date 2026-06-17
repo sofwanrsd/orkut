@@ -20,7 +20,7 @@ import {
 } from "./db.js";
 
 const MAX_UNIQUE_CODE = 500; // tambahan 1..500 rupiah
-const SUBSET_PENDING_CAP = 25; // batas jumlah pending untuk pencarian kombinasi
+const SUBSET_PENDING_CAP = 15; // batas jumlah pending untuk pencarian kombinasi (bound 2^15)
 
 // key baseline saldo per merchant
 const balanceKey = (merchantId) => `last_balance:${merchantId}`;
@@ -98,18 +98,26 @@ export async function createInvoice(db, cfg, cred, opts) {
 }
 
 // Cari subset dari daftar pending yang jumlah amount-nya == target. Bounded backtracking.
+// Mengembalikan subset HANYA jika solusinya UNIK (mencegah false-positive: satu transfer
+// yang kebetulan = jumlah beberapa tagihan tidak boleh menandai semuanya kalau ambigu).
 export function findSubset(pending, target) {
   const items = [...pending].sort((a, b) => b.amount - a.amount);
-  const result = [];
+  const solutions = [];
+  const cur = [];
   function bt(i, remaining) {
-    if (remaining === 0) return true;
-    if (i >= items.length || remaining < 0) return false;
-    result.push(items[i]);
-    if (bt(i + 1, remaining - items[i].amount)) return true;
-    result.pop();
-    return bt(i + 1, remaining);
+    if (solutions.length > 1) return; // cukup tahu ada >1 solusi → ambigu, stop
+    if (remaining === 0) {
+      solutions.push([...cur]);
+      return;
+    }
+    if (i >= items.length || remaining < 0) return;
+    cur.push(items[i]);
+    bt(i + 1, remaining - items[i].amount);
+    cur.pop();
+    bt(i + 1, remaining);
   }
-  return bt(0, target) ? result : null;
+  bt(0, target);
+  return solutions.length === 1 ? solutions[0] : null;
 }
 
 // PURE: tentukan tagihan mana yang cocok dengan kenaikan saldo `delta`.
