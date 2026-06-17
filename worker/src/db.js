@@ -98,3 +98,43 @@ export async function logBalance(db, merchantId, at, prev, current, delta, note)
     .bind(merchantId, at, prev, current, delta, note)
     .run();
 }
+
+// ---- merchant_keys (#4: API key per merchant) ----
+// Ambil api_key terdaftar untuk merchant. null = belum didaftarkan (pakai master key).
+export async function getMerchantKey(db, merchantId) {
+  try {
+    const row = await db
+      .prepare("SELECT api_key FROM merchant_keys WHERE merchant_id = ?")
+      .bind(merchantId)
+      .first();
+    return row ? row.api_key : null;
+  } catch {
+    return null; // tabel belum ada (belum migrate) → anggap belum didaftarkan
+  }
+}
+
+// ---- lock scan per merchant (#3: cegah race baseline saat polling paralel) ----
+// Lock disimpan di app_state key 'scanlock:{merchant_id}' berisi epoch kadaluwarsa.
+// acquire atomik: hanya berhasil bila belum ada lock aktif. TTL pendek sebagai self-heal.
+const SCANLOCK_TTL_MS = 15 * 1000;
+export async function acquireScanLock(db, merchantId, now) {
+  const key = `scanlock:${merchantId}`;
+  const expiresAt = now + SCANLOCK_TTL_MS;
+  // Insert kalau belum ada; kalau ada tapi sudah kedaluwarsa, ambil alih. Atomik via WHERE.
+  const res = await db
+    .prepare(
+      "INSERT INTO app_state (key, value) VALUES (?, ?) " +
+        "ON CONFLICT(key) DO UPDATE SET value = excluded.value " +
+        "WHERE CAST(app_state.value AS INTEGER) <= ?"
+    )
+    .bind(key, String(expiresAt), now)
+    .run();
+  return (res.meta?.changes ?? 0) > 0;
+}
+
+export async function releaseScanLock(db, merchantId) {
+  await db
+    .prepare("DELETE FROM app_state WHERE key = ?")
+    .bind(`scanlock:${merchantId}`)
+    .run();
+}

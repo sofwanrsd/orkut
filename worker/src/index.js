@@ -9,7 +9,7 @@ import { getConfig } from "./config.js";
 import { loginRequest, getBalance, getMutasi } from "./orderkuota.js";
 import { generateDynamicQR } from "./qrisLogic.js";
 import { createInvoice, checkStatus, scanAndMatch } from "./detection.js";
-import { getState, setState } from "./db.js";
+import { getState, setState, getMerchantKey, acquireScanLock, releaseScanLock } from "./db.js";
 import { dashboard } from "./dashboard.js";
 
 const app = new Hono();
@@ -31,7 +31,25 @@ const apiKeyGuard = async (c, next) => {
   await next();
 };
 
-// Ambil kredensial merchant dari header (server utama yang mengirim).
+// Penjaga khusus /api/pay/* (multi-tenant). Backward-compatible:
+//  - master GATEWAY_API_KEY selalu diterima (dipakai operator tunggal sekarang).
+//  - kalau merchant punya key terdaftar di merchant_keys, request HARUS pakai key itu
+//    (atau master). Mencegah pemegang satu key mengakses merchant lain.
+const payGuard = async (c, next) => {
+  const cfg = getConfig(c.env);
+  const provided = c.req.header("x-api-key") || "";
+  const merchantId = c.req.header("x-merchant-id") || "";
+
+  if (cfg.apiKey && provided === cfg.apiKey) return next(); // master key → lolos
+
+  if (!merchantId) return fail(c, "API key tidak valid", 401);
+  const mkey = await getMerchantKey(c.env.DB, merchantId);
+  if (mkey && provided === mkey) return next(); // per-merchant key cocok
+
+  // Kalau master key di-set tapi tidak cocok, dan merchant tak punya key sendiri → tolak.
+  if (cfg.apiKey || mkey) return fail(c, "API key tidak valid", 401);
+  return next(); // mode dev: tidak ada key sama sekali
+};
 function credFromHeaders(c) {
   return {
     merchantId: c.req.header("x-merchant-id") || "",
@@ -61,10 +79,10 @@ async function body(c) {
 // ================= UI =================
 app.get("/", (c) => c.html(dashboard()));
 
-// Proteksi API key: semua /api/auth/*, /api/qris/*, /api/pay/* (health & UI terbuka).
+// Proteksi API key: auth & qris pakai master key; pay/* pakai payGuard (master atau per-merchant).
 app.use("/api/auth/*", apiKeyGuard);
 app.use("/api/qris/*", apiKeyGuard);
-app.use("/api/pay/*", apiKeyGuard);
+app.use("/api/pay/*", payGuard);
 
 // ================= HEALTH =================
 // Hasil di-cache ~30 detik di D1 supaya tidak hammer login OrderKuota tiap request

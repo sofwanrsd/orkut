@@ -17,6 +17,8 @@ import {
   markPaid,
   expireOld,
   logBalance,
+  acquireScanLock,
+  releaseScanLock,
 } from "./db.js";
 
 const MAX_UNIQUE_CODE = 500; // tambahan 1..500 rupiah
@@ -142,6 +144,12 @@ export async function scanAndMatch(db, cfg, cred) {
   const { merchantId, authToken, authUsername } = cred;
 
   const now = Date.now();
+  // Lock per merchant: cegah dua scan paralel saling menimpa baseline (#3).
+  // Kalau ada scan lain sedang jalan, lewati (scan lain yang akan mengerjakan).
+  if (!(await acquireScanLock(db, merchantId, now))) {
+    return { current: 0, delta: 0, matched: [], note: "scan_locked" };
+  }
+  try {
   await expireOld(db, merchantId, now);
 
   const bal = await getBalance(cfg, authToken, authUsername);
@@ -185,6 +193,9 @@ export async function scanAndMatch(db, cfg, cred) {
   await setState(db, key, current); // geser baseline apa pun hasilnya
 
   return { current, delta, matched, note };
+  } finally {
+    await releaseScanLock(db, merchantId);
+  }
 }
 
 /**

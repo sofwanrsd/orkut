@@ -41,3 +41,12 @@ CREATE TABLE balance_log (
   note        TEXT                -- 'matched' | 'unmatched_in' | 'balance_down' | dsb
 );
 CREATE INDEX idx_balancelog_merchant ON balance_log (merchant_id, at);
+
+-- API key per merchant (opsional). Kalau tabel kosong, semua pakai master GATEWAY_API_KEY.
+-- Saat baris diisi, request /api/pay/* dengan X-Merchant-Id itu HARUS pakai api_key yang
+-- cocok (atau master key). Mencegah pemegang satu key mengakses merchant lain.
+CREATE TABLE IF NOT EXISTS merchant_keys (
+  merchant_id TEXT PRIMARY KEY,
+  api_key     TEXT NOT NULL,
+  created_at  INTEGER NOT NULL
+);
