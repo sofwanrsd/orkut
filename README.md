@@ -13,7 +13,7 @@ API Gateway untuk integrasi OrderKuota QRIS — mendukung Auth, Mutasi QRIS, Gen
 - **Generate Dynamic QRIS** — Convert static QRIS jadi dynamic dengan nominal tertanam
 - **Decode QRIS dari Foto** — Upload gambar QRIS, dapatkan raw string-nya
 - **Dashboard UI** — Antarmuka web built-in untuk test semua endpoint
-- **Restricted VPS Proxy** — Egress Indonesia dengan autentikasi dan pembatasan endpoint
+- **Proxy selectable** — Pilih Cloudflare Worker atau restricted VPS proxy lewat environment
 
 ---
 
@@ -21,7 +21,7 @@ API Gateway untuk integrasi OrderKuota QRIS — mendukung Auth, Mutasi QRIS, Gen
 
 - **Runtime**: Node.js + Express
 - **Deploy**: Vercel (serverless) / VPS
-- **Proxy**: VPS Indonesia melalui Cloudflare Tunnel
+- **Proxy**: Cloudflare Worker atau VPS Indonesia melalui Cloudflare Tunnel
 - **Dependencies**: axios, cors, multer, qrcode, jimp, qrcode-reader
 
 ---
@@ -47,6 +47,8 @@ orkut/
 │   └── views/
 │       └── dashboard.js  # Dashboard HTML
 ├── cf-worker.js          # Kode Cloudflare Worker proxy
+├── worker/               # Cloudflare Worker gateway + D1 + polling saldo
+├── vps-proxy/            # Restricted VPS proxy + service Cloudflare Tunnel
 ├── vercel.json           # Konfigurasi deploy Vercel
 └── package.json
 ```
@@ -63,7 +65,17 @@ npm install
 npm start
 ```
 
-Untuk test dengan VPS proxy secara lokal:
+Pilih salah satu mode proxy.
+
+Cloudflare Worker:
+
+```powershell
+$env:ORDERKUOTA_PROXY_URL = "shiny-fog-202f.tavevestr.workers.dev"
+Remove-Item Env:ORDERKUOTA_PROXY_KEY -ErrorAction SilentlyContinue
+npm start
+```
+
+VPS proxy:
 
 ```powershell
 $env:ORDERKUOTA_PROXY_URL = "ok-proxy.taveve.store"
@@ -77,7 +89,25 @@ Buka `http://localhost:3000` untuk akses dashboard.
 
 ## Deploy ke Vercel
 
-### 1. Setup VPS proxy
+### 1. Pilih mode proxy
+
+#### Opsi A — Cloudflare Worker
+
+Deploy isi [`cf-worker.js`](./cf-worker.js) sebagai Cloudflare Worker. Aplikasi
+akan meneruskan request langsung ke Worker tanpa `X-Proxy-Key`.
+
+```text
+Vercel → Cloudflare Worker → OrderKuota
+```
+
+Konfigurasi:
+
+```env
+ORDERKUOTA_PROXY_URL=shiny-fog-202f.tavevestr.workers.dev
+# ORDERKUOTA_PROXY_KEY tidak perlu diisi
+```
+
+#### Opsi B — VPS proxy
 
 Gunakan service di folder [`vps-proxy`](./vps-proxy). Deployment produksi saat
 ini memakai arsitektur:
@@ -100,12 +130,14 @@ vercel --prod
 
 Di Vercel Dashboard → Project → **Settings → Environment Variables**:
 
-| Variable | Value |
-|---|---|
-| `ORDERKUOTA_PROXY_URL` | `ok-proxy.taveve.store` |
-| `ORDERKUOTA_PROXY_KEY` | Nilai `PROXY_SECRET` pada VPS |
+| Mode | `ORDERKUOTA_PROXY_URL` | `ORDERKUOTA_PROXY_KEY` |
+|---|---|---|
+| Cloudflare Worker | `shiny-fog-202f.tavevestr.workers.dev` | Kosong/tidak diset |
+| VPS proxy | `ok-proxy.taveve.store` | Nilai `PROXY_SECRET` pada VPS |
 
-Set variabel untuk **Production** dan **Preview**, lalu redeploy aplikasi.
+Gunakan hanya satu baris mode pada satu waktu. Set variabel untuk **Production**
+dan **Preview**, lalu redeploy aplikasi. Untuk berpindah mode cukup ubah kedua
+environment variable tersebut; perubahan kode tidak diperlukan.
 
 ### Status deployment produksi
 
@@ -125,20 +157,21 @@ Base URL lokal: `http://localhost:3000`
 
 ### Batasan endpoint mutasi QRIS
 
-Endpoint login dan balance dapat dijangkau melalui VPS proxy. Namun OrderKuota
-dapat menolak endpoint mutasi dengan HTTP `469` dan pesan berikut:
+Endpoint login dan balance dapat dijangkau melalui Cloudflare Worker maupun VPS
+proxy. Namun OrderKuota dapat menolak endpoint mutasi pada kedua mode dengan
+HTTP `469` dan pesan berikut:
 
 ```text
 Gunakan jaringan Internet lainnya / tidak menggunakan Hospot Wifi sementara waktu. [QRIS]
 ```
 
-Respons tersebut berasal dari proteksi OrderKuota, bukan dari Vercel,
-Cloudflare Tunnel, atau service proxy. Lokasi IP di Indonesia tidak menjamin
-endpoint mutasi diterima karena IP VPS tetap dapat diklasifikasikan sebagai
-jaringan data center. Jangan mengandalkan `/api/qris/mutasi` untuk deteksi
-pembayaran otomatis. Gunakan polling saldo + nominal unik melalui implementasi
-Cloudflare Worker pada folder [`worker`](./worker), atau gunakan akses resmi yang
-diizinkan OrderKuota.
+Respons tersebut berasal dari proteksi OrderKuota, bukan dari Vercel atau kode
+proxy. Cloudflare Worker memakai shared egress IP, sedangkan IP VPS tetap dapat
+diklasifikasikan sebagai jaringan data center. Lokasi IP di Indonesia tidak
+menjamin endpoint mutasi diterima. Jangan mengandalkan `/api/qris/mutasi` untuk
+deteksi pembayaran otomatis. Gunakan polling saldo + nominal unik melalui
+implementasi Cloudflare Worker pada folder [`worker`](./worker), atau gunakan
+akses resmi yang diizinkan OrderKuota.
 
 ### Health Check
 
@@ -284,7 +317,7 @@ Content-Type: multipart/form-data
 
 | Variable | Default | Keterangan |
 |---|---|---|
-| `ORDERKUOTA_PROXY_URL` | `app.orderkuota.com` | Host proxy tanpa protokol. Jika kosong, aplikasi mengakses OrderKuota langsung. |
+| `ORDERKUOTA_PROXY_URL` | `app.orderkuota.com` | Host Cloudflare Worker atau VPS proxy tanpa protokol. Jika kosong, aplikasi mengakses OrderKuota langsung. |
 | `ORDERKUOTA_PROXY_KEY` | kosong | Secret untuk header `X-Proxy-Key` saat memakai VPS proxy. |
 
 ---
@@ -292,8 +325,9 @@ Content-Type: multipart/form-data
 ## Catatan Deploy
 
 - **Vercel**: Request body max **4MB** (sudah disesuaikan di multer config)
+- **Cloudflare Worker proxy**: tidak memerlukan `ORDERKUOTA_PROXY_KEY`
 - **VPS proxy**: hanya bind ke loopback dan dipublikasikan melalui tunnel terpisah
-- **Mutasi QRIS**: dapat ditolak OrderKuota meskipun VPS berada di Indonesia
+- **Mutasi QRIS**: dapat ditolak OrderKuota pada mode Cloudflare Worker maupun VPS
 - Dashboard UI bisa diakses di root URL (`/`)
 
 ---
