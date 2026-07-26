@@ -13,7 +13,7 @@ API Gateway untuk integrasi OrderKuota QRIS — mendukung Auth, Mutasi QRIS, Gen
 - **Generate Dynamic QRIS** — Convert static QRIS jadi dynamic dengan nominal tertanam
 - **Decode QRIS dari Foto** — Upload gambar QRIS, dapatkan raw string-nya
 - **Dashboard UI** — Antarmuka web built-in untuk test semua endpoint
-- **CF Worker Proxy** — Bypass IP restriction OrderKuota saat deploy di server luar Indonesia
+- **Restricted VPS Proxy** — Egress Indonesia dengan autentikasi dan pembatasan endpoint
 
 ---
 
@@ -21,7 +21,7 @@ API Gateway untuk integrasi OrderKuota QRIS — mendukung Auth, Mutasi QRIS, Gen
 
 - **Runtime**: Node.js + Express
 - **Deploy**: Vercel (serverless) / VPS
-- **Proxy**: Cloudflare Workers (untuk bypass IP block OrderKuota)
+- **Proxy**: VPS Indonesia melalui Cloudflare Tunnel
 - **Dependencies**: axios, cors, multer, qrcode, jimp, qrcode-reader
 
 ---
@@ -63,10 +63,11 @@ npm install
 npm start
 ```
 
-Untuk test dengan CF Worker proxy secara lokal:
+Untuk test dengan VPS proxy secara lokal:
 
 ```powershell
-$env:ORDERKUOTA_PROXY_URL = "shiny-fog-202f.tavevestr.workers.dev"
+$env:ORDERKUOTA_PROXY_URL = "ok-proxy.taveve.store"
+$env:ORDERKUOTA_PROXY_KEY = "<proxy-secret>"
 npm start
 ```
 
@@ -76,13 +77,19 @@ Buka `http://localhost:3000` untuk akses dashboard.
 
 ## Deploy ke Vercel
 
-### 1. Setup Cloudflare Worker (wajib — bypass IP block)
+### 1. Setup VPS proxy
 
-1. Buka [workers.cloudflare.com](https://workers.cloudflare.com) → **Create Worker**
-2. Hapus kode default, paste isi `cf-worker.js`
-3. Deploy → copy URL worker (format: `nama.subdomain.workers.dev`)
+Gunakan service di folder [`vps-proxy`](./vps-proxy). Deployment produksi saat
+ini memakai arsitektur:
 
-### 2. Deploy ke Vercel
+```text
+Vercel → Cloudflare Tunnel → VPS Indonesia → OrderKuota
+```
+
+Proxy hanya menerima tiga endpoint OrderKuota yang digunakan aplikasi, hanya
+mendengarkan `127.0.0.1:8788`, dan mewajibkan header `X-Proxy-Key`.
+
+### 2. Deploy aplikasi
 
 ```bash
 npm i -g vercel
@@ -95,13 +102,43 @@ Di Vercel Dashboard → Project → **Settings → Environment Variables**:
 
 | Variable | Value |
 |---|---|
-| `ORDERKUOTA_PROXY_URL` | `shiny-fog-202f.tavevestr.workers.dev` |
+| `ORDERKUOTA_PROXY_URL` | `ok-proxy.taveve.store` |
+| `ORDERKUOTA_PROXY_KEY` | Nilai `PROXY_SECRET` pada VPS |
+
+Set variabel untuk **Production** dan **Preview**, lalu redeploy aplikasi.
+
+### Status deployment produksi
+
+- Aplikasi: `https://orkut-mu.vercel.app`
+- Proxy health: `https://ok-proxy.taveve.store/health`
+- VPS proxy dan Cloudflare Tunnel dijalankan sebagai service terpisah agar
+  tidak mengganggu aplikasi lain pada VPS.
+
+> Jangan commit `ORDERKUOTA_PROXY_KEY`, token merchant, atau kredensial VPS ke
+> repository.
 
 ---
 
 ## API Endpoints
 
 Base URL lokal: `http://localhost:3000`
+
+### Batasan endpoint mutasi QRIS
+
+Endpoint login dan balance dapat dijangkau melalui VPS proxy. Namun OrderKuota
+dapat menolak endpoint mutasi dengan HTTP `469` dan pesan berikut:
+
+```text
+Gunakan jaringan Internet lainnya / tidak menggunakan Hospot Wifi sementara waktu. [QRIS]
+```
+
+Respons tersebut berasal dari proteksi OrderKuota, bukan dari Vercel,
+Cloudflare Tunnel, atau service proxy. Lokasi IP di Indonesia tidak menjamin
+endpoint mutasi diterima karena IP VPS tetap dapat diklasifikasikan sebagai
+jaringan data center. Jangan mengandalkan `/api/qris/mutasi` untuk deteksi
+pembayaran otomatis. Gunakan polling saldo + nominal unik melalui implementasi
+Cloudflare Worker pada folder [`worker`](./worker), atau gunakan akses resmi yang
+diizinkan OrderKuota.
 
 ### Health Check
 
@@ -164,7 +201,9 @@ Content-Type: application/json
 }
 ```
 
-Mengembalikan 4 transaksi masuk (status `IN`) terakhir.
+Mengembalikan 4 transaksi masuk (status `IN`) terakhir jika akses mutasi
+diizinkan OrderKuota. Endpoint ini dapat diblokir dengan HTTP `469`; jangan
+gunakan sebagai satu-satunya mekanisme deteksi pembayaran.
 
 ---
 
@@ -187,7 +226,8 @@ Content-Type: application/json
 }
 ```
 
-Mengembalikan semua transaksi (IN & OUT) dengan filter lengkap dan pagination.
+Mengembalikan semua transaksi (IN & OUT) dengan filter lengkap dan pagination
+jika akses mutasi diizinkan OrderKuota. Batasan HTTP `469` juga berlaku.
 
 ---
 
@@ -244,14 +284,16 @@ Content-Type: multipart/form-data
 
 | Variable | Default | Keterangan |
 |---|---|---|
-| `ORDERKUOTA_PROXY_URL` | `app.orderkuota.com` | Host proxy (CF Worker). Jika tidak diset, hit langsung ke OrderKuota. |
+| `ORDERKUOTA_PROXY_URL` | `app.orderkuota.com` | Host proxy tanpa protokol. Jika kosong, aplikasi mengakses OrderKuota langsung. |
+| `ORDERKUOTA_PROXY_KEY` | kosong | Secret untuk header `X-Proxy-Key` saat memakai VPS proxy. |
 
 ---
 
 ## Catatan Deploy
 
 - **Vercel**: Request body max **4MB** (sudah disesuaikan di multer config)
-- **CF Worker free tier**: 100.000 request/hari — cukup untuk skala kecil-menengah
+- **VPS proxy**: hanya bind ke loopback dan dipublikasikan melalui tunnel terpisah
+- **Mutasi QRIS**: dapat ditolak OrderKuota meskipun VPS berada di Indonesia
 - Dashboard UI bisa diakses di root URL (`/`)
 
 ---
