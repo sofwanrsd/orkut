@@ -9,6 +9,7 @@ module.exports = {
   // Konfigurasi OrderKuota (Bypass Constants Baru)
   orderKuota: {
     baseUrl: process.env.ORDERKUOTA_PROXY_URL || "app.orderkuota.com",
+    proxyKey: process.env.ORDERKUOTA_PROXY_KEY || "",
     userAgent: "okhttp/4.12.0", // Sesuai input kamu
 
     // Data Identitas Perangkat Baru

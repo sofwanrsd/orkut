@@ -36,6 +36,9 @@ class QrisService {
           Host: this.config.baseUrl,
           "User-Agent": this.config.userAgent,
           "Content-Type": "application/x-www-form-urlencoded",
+          ...(this.config.proxyKey
+            ? { "X-Proxy-Key": this.config.proxyKey }
+            : {}),
         },
       });
 
@@ -93,6 +96,9 @@ class QrisService {
           Host: this.config.baseUrl,
           "User-Agent": this.config.userAgent,
           "Content-Type": "application/x-www-form-urlencoded",
+          ...(this.config.proxyKey
+            ? { "X-Proxy-Key": this.config.proxyKey }
+            : {}),
         },
       });
 
@@ -139,6 +145,9 @@ class QrisService {
           Host: this.config.baseUrl,
           "User-Agent": this.config.userAgent,
           "Content-Type": "application/x-www-form-urlencoded",
+          ...(this.config.proxyKey
+            ? { "X-Proxy-Key": this.config.proxyKey }
+            : {}),
         },
       });
 

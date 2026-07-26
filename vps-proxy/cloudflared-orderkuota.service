@@ -1,0 +1,15 @@
+[Unit]
+Description=Cloudflare Tunnel for OrderKuota proxy
+After=network-online.target orderkuota-proxy.service
+Wants=network-online.target
+Requires=orderkuota-proxy.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/cloudflared --no-autoupdate --config /etc/cloudflared-orderkuota/config.yml tunnel run
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

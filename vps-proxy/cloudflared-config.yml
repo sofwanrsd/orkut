@@ -1,0 +1,7 @@
+tunnel: fdf11bd3-644d-4909-837c-5dec956a0fad
+credentials-file: /etc/cloudflared-orderkuota/fdf11bd3-644d-4909-837c-5dec956a0fad.json
+
+ingress:
+  - hostname: ok-proxy.taveve.store
+    service: http://127.0.0.1:8788
+  - service: http_status:404
